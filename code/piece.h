@@ -1,11 +1,12 @@
 #include <vector>
 #include <utility>
 
-class Pieces {
+class Piece {
 	bool colour;
 public:
+    virtual Piece(bool)=0;
 	bool getColour();
-	bool isValid(std::pair<int,int> pm);
-	vector(std::pair<int,int>) getMoveReq();
+	virtual bool isValid(std::pair<int,int> pm)=0;
+	virtual vector(std::pair<int,int>) getMoveReq(pair<int,int>)=0;
+    
 };
-	
