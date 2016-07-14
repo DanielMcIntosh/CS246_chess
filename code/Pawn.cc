@@ -2,4 +2,23 @@
 #include <utility>
 #include "Pawn.h"
 
-Pawn::Pawn(bool): colour{colour};
+use namespace std;
+
+Pawn::Pawn(bool): colour{colour}, firstMove{true} {};
+
+char Pawn::getChar() {colour ? return 'p' : return 'P';};
+
+bool Pawn::isValid(pair<int, int> co) {
+    if ((co.second == 1 || co.second == 2) && co.first == 0) {
+        if (co.second == 2) {
+            firstMove ? return true : return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
+
+vector<pair<int,int>> getMoveReq(pair<int,int> co) {
+    

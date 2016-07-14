@@ -4,11 +4,14 @@
 #include "Piece.h"
 
 class Pawn: public Piece {
+    bool firstMove;
 public:
     Pawn(bool colour);
-    bool isValid(std::pair<int,int> pm);
+    bool isValid(std::pair<int,int> co);
     //Takes in difference in position for the move returns the required relative empty spaces
-    vector vector(std::pair<int,int>) getMoveReq();
+    std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co);
+    char getChar();
+    void firstMoved();
 };
 
 #endif
