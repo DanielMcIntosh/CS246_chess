@@ -4,7 +4,7 @@
 
 use namespace std;
 
-Pawn::Pawn(bool): colour{colour}, firstMove{true} {};
+Pawn::Pawn(bool colour): colour{colour}, firstMove{true} {};
 
 char Pawn::getChar() {colour ? return 'p' : return 'P';};
 

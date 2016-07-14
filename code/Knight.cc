@@ -4,7 +4,7 @@
 
 use namespace std;
 
-Knight::Knight(bool): colour{colour} {};
+Knight::Knight(bool colour): colour{colour} {};
 
 char Knight::getChar() {colour ? return 'k' : return 'K';};
 
