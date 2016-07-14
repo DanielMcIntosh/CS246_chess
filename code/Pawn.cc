@@ -20,5 +20,15 @@ bool Pawn::isValid(pair<int, int> co) {
     }
 }
 
-vector<pair<int,int>> getMoveReq(pair<int,int> co) {
-    
+vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {
+    vector<pair<int,int>> req = {};
+    if (co.second == 2) {
+        pair<int, int> temp(0, 1);
+        req.emplace(temp);
+    }
+    return req;
+}
+
+void Pawn::firstMoved() {
+    this.firstMove = false;
+}
