@@ -9,14 +9,26 @@ Pawn::Pawn(bool colour): colour{colour}, firstMove{true} {};
 char Pawn::getChar() {colour ? return 'p' : return 'P';};
 
 bool Pawn::isValid(pair<int, int> co) {
-    if ((co.second == 1 || co.second == 2) && co.first == 0) {
-        if (co.second == 2) {
-            firstMove ? return true : return false;
+    if (this.colour == false) {
+        if ((co.second == 1 || co.second == 2) && co.first == 0) {
+            if (co.second == 2) {
+                firstMove ? return true : return false;
+            } else {
+                return true;
+            }
         } else {
-            return true;
+            return false;
         }
     } else {
-        return false;
+        if ((co.second == -1 || co.second == -2) && co.first == 0) {
+            if (co.second == -2) {
+                firstMove ? return true : return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }
 
