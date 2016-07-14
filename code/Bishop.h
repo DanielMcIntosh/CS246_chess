@@ -6,9 +6,9 @@
 class Bishop: public Piece{
 public:
 	Bishop(bool c);
-	bool isValid(std::pair<int,int> co);
-	std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co);
-    char getChar();
+	bool isValid(std::pair<int,int> co) override;
+	std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co) override;
+    char getChar() override;
 };
 
 #endif	
