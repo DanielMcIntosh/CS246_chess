@@ -9,7 +9,7 @@ public:
     Rook(bool colour);
     bool isValid(std::pair<int,int> co);
     //Takes in difference in position for the move returns the required relative empty spaces
-    std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co);
+    std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co) override;
 };
 
 #endif
