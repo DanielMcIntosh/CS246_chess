@@ -1,14 +1,14 @@
-#ifndef __KING_H__
-#define __KING_H__
+#ifndef __BISHOP_H__
+#define __BISHOP_H__
 
 #include "Piece.h"
 
-class King : public Piece{
+class Bishop: public Piece{
 public:
-	King(bool c);
+	Bishop(bool c);
 	bool isValid(std::pair<int,int> co) override;
 	std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co) override;
     char getChar() override;
-}
+};
 
-#endif
+#endif	
