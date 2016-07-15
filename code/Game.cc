@@ -23,7 +23,7 @@ bool Game::isValidMove(int x1, int y1, int x2, int y2, Piece *p)
 	return true;
 }
 
-int Game::tryMove(Move &attempt)
+int Game::tryMove(Move &attempt, int priorityMask)
 {
 	int x1 = attempt.getOrigin().first, y1 = attempt.getOrigin().second;
 	int x2 = attempt.getDestination().first, y2 = attempt.getDestination().second;
@@ -33,22 +33,24 @@ int Game::tryMove(Move &attempt)
 	if (!isValidMove(x1, y1, x2, y2, p))
 		return 0;
 
-
 	int movePriority = 0b1001; //2^0 = valid, 2^1 = checking move, 2^2 = capturing move, 2^3 = avoids capture
 
-	for (int x = 0, bool kingFound = false, bool unsafe = false; !(kingFound && unsafe) && x < 8; ++x)
+	//check the board to see if this move puts opponent in check, or if it moves the piece into a threatened location
+	for (int x = 0, bool kingFound = !causeCheck(priorityMask); x < 8 && (!kingFound || isSafe(movePriority&priorityMask)); ++x)
 	{
-		for (int y = 0; !(kingFound && unsafe) && y < 8; ++y)
+		for (int y = 0; (!kingFound || isSafe(movePriority&priorityMask)) && y < 8; ++y)
 		{
-			if (!kingFound && isValidMove(x2, y2, x, y, p) && board[x][y].getChar() == 'K' + p->getColour() ? 0 : ('a' - 'A'))
+			if (!board[x][y])
+				continue;
+			//can p attack opposing king (at x, y) from x2, y2?
+			if (!kingFound && (kingFound = (board[x][y].getChar() == p->getColour() ? 'K' : 'k')) && isValidMove(x2, y2, x, y, p))
 			{
 				movePriority |= 0b0010;
-				kingFound = true;
 			}
-			if (!unsafe && isValidMove(x, y, x2, y2, board[x][y]))
+			//can p get captured by the piece at x, y
+			if (isSafe(movePriority&priorityMask) && isValidMove(x, y, x2, y2, board[x][y]))
 			{
-				movePriority &= 0b0111;
-				unsafe = true;
+				movePriority &= ~0b1000;
 			}
 		}
 	}
@@ -59,4 +61,19 @@ int Game::tryMove(Move &attempt)
 	}
 
 	return movePriority;
+}
+
+bool Game::causeCheck(int priority)
+{
+	return priority & 0b10;
+}
+
+bool Game::doesCapture(int priority)
+{
+	return priority & 0b100;
+}
+
+bool Game::isSafe(int priority)
+{
+	return priority & 0b1000;
 }
