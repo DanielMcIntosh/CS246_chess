@@ -9,6 +9,6 @@ public:
 	bool isValid(std::pair<int,int> co) override;
 	std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co) override;
     char getChar() override;
-}
+};
 
 #endif

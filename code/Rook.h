@@ -1,5 +1,6 @@
-#IFNDEF _ROOK_H_
-#DEFINE _ROOK_H_
+#ifndef _ROOK_H_
+#define _ROOK_H_
+
 #include <vector>
 #include <utility>
 #include "Piece.h"

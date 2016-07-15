@@ -1,9 +1,14 @@
-#include "Player.h"
-#include "Game.h"
-#include "Move.h"
 #include <iostream>
 #include <vector>
 #include <utility>
+
+#include "Controller.h"
+#include "Player.h"
+#include "Human.h"
+#include "Ai.h"
+#include "Game.h"
+#include "Move.h"
+
 #define numPlayers 2
 
 using namespace std;
@@ -16,15 +21,15 @@ int main(){
 		if (input == "setup"){
 			curGame->setup();
 		} else if (input == "game"){
-			Player p[numPlayers];
+			Player *p[numPlayers];
 			for (int i = 0 ; i < numPlayers; ++i){
 				string arg;
 				cin >> arg;
 				if (arg == "human"){
-					p[i] = Human(); 
+					p[i] = &Human(); 
 				} else {
 					int lvl = arg[9] - '0';
-					p[i] = Ai(lvl);
+					p[i] = &Ai(lvl);
 				}
 			}
 			runGame(p);
@@ -38,10 +43,11 @@ int main(){
 }
 
 
-void runGame(Player p[]){
+void runGame(Player *p[]){
 	int start = curGame.getStartPlayer();
-	for (int moveCount = 0, bool result =true ; result ; ++moveCount){
-		Move m = player[(moveCount + start)%numPlayers].getMove();
+	bool result = true;
+	for (int moveCount = 0; result ; ++moveCount){
+		Move m = p[(moveCount + start)%numPlayers]->getMove();
 		int moveResult = curGame.executeMove(m);
 		if (!moveResult){
 			--moveCount;
@@ -52,17 +58,17 @@ void runGame(Player p[]){
 	}
 }
 
-bool reactToState(int i, int curPlayer){
-	if (i == 3){
+bool reactToState(int state, int curPlayer){
+	if (state == 3){
 		cout << "Checkmate! ";
 	}
-	if (i >= 2){
-		cout << (((bool)curPlayer == (bool)(i%2)) ? "Black" : "White") << " wins!" << endl;
+	if (state >= 2){
+		cout << (((bool)curPlayer == (bool)(state%2)) ? "Black" : "White") << " wins!" << endl;
 		return false;
-	} else if (i == 1){
+	} else if (state == 1){
 		cout << "Stalemate!" << endl;
 		return false;
-	} else if (i == -1){
+	} else if (state == -1){
 		return true;
 	} else {
 		cout << (curPlayer ? "White" : "Black") << " is in check." << endl;

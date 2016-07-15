@@ -1,5 +1,6 @@
-#IFNDEF _KNIGHT_H_
-#DEFINE _KNIGHT_H_
+#ifndef _KNIGHT_H_
+#define _KNIGHT_H_
+
 #include <vector>
 #include <utility>
 #include "Piece.h"

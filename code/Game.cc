@@ -36,7 +36,8 @@ int Game::tryMove(Move &attempt, int priorityMask)
 	int movePriority = 0b1001; //2^0 = valid, 2^1 = checking move, 2^2 = capturing move, 2^3 = avoids capture
 
 	//check the board to see if this move puts opponent in check, or if it moves the piece into a threatened location
-	for (int x = 0, bool kingFound = !causeCheck(priorityMask); x < 8 && (!kingFound || isSafe(movePriority&priorityMask)); ++x)
+	bool kingFound = !causeCheck(priorityMask);
+	for (int x = 0; x < 8 && (!kingFound || isSafe(movePriority&priorityMask)); ++x)
 	{
 		for (int y = 0; (!kingFound || isSafe(movePriority&priorityMask)) && y < 8; ++y)
 		{

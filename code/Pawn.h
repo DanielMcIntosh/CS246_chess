@@ -1,5 +1,5 @@
-#IFNDEF _PAWN_H_
-#DEFINE _PAWN_H_
+#ifndef _PAWN_H_
+#define _PAWN_H_
 #include <vector>
 #include <utility>
 #include "Piece.h"

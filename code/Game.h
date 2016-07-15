@@ -2,10 +2,11 @@
 #define _GAME_
 
 class Move;
+class Piece;
 
 class Game {
 private:
-	Piece *board[8][8] = {0};
+	Piece *board[8][8];
 	bool isValidMove(int x1, int y1, int x2, int y2, Piece *p);
 
 	bool causeCheck(int priority);
@@ -13,6 +14,9 @@ private:
 	bool isSafe(int priority);
 public:
 	int tryMove(Move &attempt);
+	void setup();
+	bool isValidBoard();
+	int executeMove(Move &m);
 };
 
 #endif

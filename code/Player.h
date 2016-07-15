@@ -1,5 +1,10 @@
+#ifndef _PLAYER_
+#define _PLAYER_
+
 class Move;
 class Player {
 public:
-	Move getMove() =0; 
+	virtual Move getMove() =0; 
 };
+
+#endif
