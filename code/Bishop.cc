@@ -1,6 +1,7 @@
 #include "Bishop.h"
 #include <utility>
 
+using namespace std;
 
 Bishop::Bishop(bool c): colour{c} {}
 
