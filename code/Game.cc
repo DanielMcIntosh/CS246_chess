@@ -129,6 +129,19 @@ bool Game::isSafe(int priority)
 	return priority & 0b1000;
 }
 
+ostream& operator<<(ostream& os, const Game& g)
+{
+    for(int i = 0; i < 8; i++) {
+        os << i << " ";
+        for(int j = 0; j < 8; j++) {
+            g->board[i][j] == nullptr ? os <<  '-' : os << g->board[i][j]->getChar();
+        }
+        os << endl;
+    }
+    os << endl;
+    os << "  1234678";
+    return os;
+}
 bool Game::isValidBoard(){
 	int bking = 0;
 	int wking = 0;
