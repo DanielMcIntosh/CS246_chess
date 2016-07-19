@@ -78,3 +78,27 @@ bool Game::isSafe(int priority)
 {
 	return priority & 0b1000;
 }
+
+
+ostream& Game::operator<<(ostream& os, const Game& gm) {
+    for(int i = 0; i < 8; i++) {
+		os << (8 - i) << ' ';
+		for(int j = 0; j < 8; j++) {
+			if(gm.board[i][j] == nullptr) {
+				if(i % 2 == 0 && j % 2 == 0) {
+					os << ' ';
+				} else if (i % 2 == 1 && j & 2 == 1) {
+					os << ' ';
+				} else {
+					os << '-';
+				}
+			} else {
+				os << gm.board[i][j].getChar();
+			}
+		}
+		os << endl;
+	}
+	os << endl;
+	os << "  adbcdefh";
+    return os;
+}
