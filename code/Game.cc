@@ -6,7 +6,7 @@
 #include "Piece.h"
 using namespace std;
 
-bool Game::isValidMove(int x1, int y1, int x2, int y2, Piece *p)
+bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
 		return false;
@@ -30,7 +30,7 @@ int Game::tryMove(Move &attempt, int priorityMask)
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
 		return 0;
 	Piece *p = board[x1][y1];
-	if (!isValidMove(x1, y1, x2, y2, p))
+	if (!doesBoardPermit(x1, y1, x2, y2, p))
 		return 0;
 
 	int movePriority = 0b1001; //2^0 = valid, 2^1 = checking move, 2^2 = capturing move, 2^3 = avoids capture
@@ -44,12 +44,12 @@ int Game::tryMove(Move &attempt, int priorityMask)
 			if (!board[x][y])
 				continue;
 			//can p attack opposing king (at x, y) from x2, y2?
-			if (!kingFound && (kingFound = (board[x][y].getChar() == p->getColour() ? 'K' : 'k')) && isValidMove(x2, y2, x, y, p))
+			if (!kingFound && (kingFound = (board[x][y].getChar() == p->getColour() ? 'K' : 'k')) && doesBoardPermit(x2, y2, x, y, p))
 			{
 				movePriority |= 0b0010;
 			}
 			//can p get captured by the piece at x, y
-			if (isSafe(movePriority&priorityMask) && isValidMove(x, y, x2, y2, board[x][y]))
+			if (isSafe(movePriority&priorityMask) && doesBoardPermit(x, y, x2, y2, board[x][y]))
 			{
 				movePriority &= ~0b1000;
 			}
