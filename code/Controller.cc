@@ -75,10 +75,3 @@ bool reactToState(int state, int curPlayer){
 		return true;
 	}
 }
-
-
-
-
-
-
-
