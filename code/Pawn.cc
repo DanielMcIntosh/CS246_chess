@@ -8,28 +8,26 @@ Pawn::Pawn(bool colour): colour{colour}, firstMove{true} {};
 
 char Pawn::getChar() {colour ? return 'p' : return 'P';};
 
-bool Pawn::isValid(pair<int, int> co) {
-    if (this.colour == false) {
-        if ((co.second == 1 || co.second == 2) && co.first == 0) {
-            if (co.second == 2) {
-                firstMove ? return true : return false;
-            } else {
-                return true;
-            }
+bool Pawn::isValidMove(pair<int, int> co) {
+    int dir = 1;
+    if (this.colour) { dir = -1;}
+
+    if ((co.second == 1*dir || co.second == 2*dir) && co.first == 0) {
+        if (co.second == 2*dir) {
+            return firstMove;
         } else {
-            return false;
+            return true;
         }
     } else {
-        if ((co.second == -1 || co.second == -2) && co.first == 0) {
-            if (co.second == -2) {
-                firstMove ? return true : return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        return false;
     }
+}
+
+bool Pawn::isValidCapture(pair<int, int> co) {
+    int dir = 1;
+    if (this.colour) { dir = -1;}
+
+    return (co.second == 1*dir && abs(co.first) == 1);
 }
 
 vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {

@@ -10,19 +10,14 @@ char Rook::getChar() {colour ? return 'r' : return 'R';};
 
 bool Rook::isValid(pair<int, int> co) {
     if(co.first == 0) {
-        if(co.second != 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (co.second != 0);
     } else if(co.second == 0) {
-        if(co.first != 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (co.first != 0);
     }
 }
+
+bool Rook::isValidMove(std::pair<int,int> co) {isValid(co);}
+bool Rook::isValidCapture(std::pair<int,int> co) {isValid(co);}
 
 vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {
     vector<pair<int,int>> req = {};
