@@ -79,6 +79,66 @@ bool Game::isSafe(int priority)
 	return priority & 0b1000;
 }
 
+bool Game::isValidBoard(){
+	int bking = 0;
+	int wking = 0;
+	pair<int,int> bk_pos(0,0);
+	pair<int,int> wk_pos(0,0);
+	for(int i = 0; i < 8; ++i){  // Checking there only exist 1 king of each colour
+		for (int j = 0; i < 8; ++j){
+			char c = board[i][j].getChar();
+			if (c == 'K'){
+				++wking;
+				wk_pos.first = i;
+				wk_pos.second = j;
+			} else if (c == 'k'){
+				bk_pos.first =i;
+				bk_pos.second = j;
+			}
+		}
+	}
+	if (bking != 1 && wking != 1){
+		return false;
+	}
+	// Check if there doesn't exist any Pawns on the first and last row.
+	for (int j = 0; j < 8; ++j){
+		char a = board[0][j].getChar();
+		char b = board[7][j].getChar();
+		if(a=='P'||b== 'p'){
+			return false;
+		}
+	}
+	// Check for check mate situations.
+
+	int i = wk_pos.first;
+	int j = wk_pos.second;
+	for(int k = i+1; k < 8 && board[k][j] == nullptr; ++k){}
+	dest = board[k][j].getChar();
+	if (dest == 'q'|| dest == 'r'){return false;}
+	for(int k = i-1; k >= 0 && board[k][j] == nullptr; --k){}
+	dest = board[k][j].getChar();
+	if (dest == 'q'|| dest == 'r'){return false;}
+	for(int k = j+1; k < 8 && board[i][k] == nullptr; ++k){}
+	dest = board[i][k].getChar();
+	if (dest == 'q'|| dest == 'r'){return false;}
+	for(int k = j-1; k >= 0 && board[i][k] == nullptr; --k){}
+	dest = board[i][k].getChar();
+	if (dest == 'q'|| dest == 'r'){return false;}
+
+	for(int k = i+1, int h = j+1; k < 8 && h < 8 && board[k][h] == nullptr; ++k,++h){}
+	dest = board[k][h].getChar();
+	if (dest == 'q'|| dest == 'b'){return false;}
+	for(int k = i-1, int h = j-1; k >= 0 && h >= 0 && board[k][h] == nullptr; --k,--h){}
+	dest = board[k][h].getChar();
+	if (dest == 'q'|| dest == 'b'){return false;}
+	for(int k = i+1, int h = j-1; k < 8 && h >= 0 && board[k][h] == nullptr; ++k,--h){}
+	dest = board[k][h].getChar();
+	if (dest == 'q'|| dest == 'b'){return false;}
+	for(int k = i-1, int h = j+1; k >= 0 && h < 8 && board[k][h] == nullptr; --k,++h){}
+	dest = board[k][h].getChar();
+	if (dest == 'q'|| dest == 'b'){return false;}
+}
+
 
 ostream& Game::operator<<(ostream& os, const Game& gm) {
     for(int i = 0; i < 8; i++) {
@@ -102,3 +162,5 @@ ostream& Game::operator<<(ostream& os, const Game& gm) {
 	os << "  adbcdefh";
     return os;
 }
+
+
