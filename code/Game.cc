@@ -108,35 +108,98 @@ bool Game::isValidBoard(){
 			return false;
 		}
 	}
-	// Check for check mate situations.
+	// Check for check mate situations (Vulnerability to Queen, Bishop and Rook).
+	for(int x = 0; x < 2; ++x){
+		int i;
+		int j;
+		int diff = 0;
+		int pawnDir;
+		if (x == 0){
+			i = wk_pos.first;
+			j = wk_post.second;
+			diff = 0;
+			pawnDir = 1;
+		} else {
+			i = bk_pos.first;
+			j = bk_post.second;
+			diff = 'a' - 'A';
+			pawnDir = -1;
+		}
+		char dest;
+		for(int k = i+1; k < 8 ; ++k){
+			if (board[k][j]){
+				dest = board[k][j].getChar();
+				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = i-1; k >= 0 ; --k){
+			if (board[k][j]){
+				dest = board[k][j].getChar();
+				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = j+1; k < 8 ; ++k){
+			if (board[k][j]){
+				dest = board[i][k].getChar();
+				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = j-1; k >= 0 ; --k){
+			if (board[i][k]){
+				dest = board[k][j].getChar();
+				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = i+1, int h = j+1; k < 8 && h < 8 ; ++k,++h){
+			if (board[k][h]){
+				dest = board[k][h].getChar();
+				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = i-1, int h = j-1; k >= 0 && h >= 0 ; --k,--h){
+			if (board[k][h]){
+				dest = board[k][h].getChar();
+				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = i+1, int h = j-1; k < 8 && h >= 0 ; ++k,--h){
+			if (board[k][h]){
+				dest = board[k][h].getChar();
+				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
+				break;
+			}
+		}
+		for(int k = i-1, int h = j+1; k >= 0 && h < 8 ; --k,++h){
+			if (board[k][h]){
+				dest = board[k][h].getChar();
+				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
+				break;
+			}
+		}
+		if (i+1 < 8 && board[i+1][j+pawnDir]){
+			dest = board[i+1][j+pawnDir].getChar();
+			if(dest == 'p'-diff){
+				return false;
+			}
+		}
+		if (i-1 >= 0 && board[i-1][j+pawnDir]){
+			dest = board[i-1][j+pawnDir].getChar();
+			if(dest == 'p'-diff){
+				return false;
+			}
+		}	
+		for (int i = 0; i < 8; ++i){
+			
+		}
 
-	int i = wk_pos.first;
-	int j = wk_pos.second;
-	for(int k = i+1; k < 8 && board[k][j] == nullptr; ++k){}
-	dest = board[k][j].getChar();
-	if (dest == 'q'|| dest == 'r'){return false;}
-	for(int k = i-1; k >= 0 && board[k][j] == nullptr; --k){}
-	dest = board[k][j].getChar();
-	if (dest == 'q'|| dest == 'r'){return false;}
-	for(int k = j+1; k < 8 && board[i][k] == nullptr; ++k){}
-	dest = board[i][k].getChar();
-	if (dest == 'q'|| dest == 'r'){return false;}
-	for(int k = j-1; k >= 0 && board[i][k] == nullptr; --k){}
-	dest = board[i][k].getChar();
-	if (dest == 'q'|| dest == 'r'){return false;}
-
-	for(int k = i+1, int h = j+1; k < 8 && h < 8 && board[k][h] == nullptr; ++k,++h){}
-	dest = board[k][h].getChar();
-	if (dest == 'q'|| dest == 'b'){return false;}
-	for(int k = i-1, int h = j-1; k >= 0 && h >= 0 && board[k][h] == nullptr; --k,--h){}
-	dest = board[k][h].getChar();
-	if (dest == 'q'|| dest == 'b'){return false;}
-	for(int k = i+1, int h = j-1; k < 8 && h >= 0 && board[k][h] == nullptr; ++k,--h){}
-	dest = board[k][h].getChar();
-	if (dest == 'q'|| dest == 'b'){return false;}
-	for(int k = i-1, int h = j+1; k >= 0 && h < 8 && board[k][h] == nullptr; --k,++h){}
-	dest = board[k][h].getChar();
-	if (dest == 'q'|| dest == 'b'){return false;}
+	}
+	return true;
 }
 
 
