@@ -132,6 +132,13 @@ bool Game::isValidBoard(){
 					continue;
 				}
 				for(int a = i+k, int b = j+h; a >= 0 && a < 8 && b >= 0 && b < 8; a+k, b+h){
+					if (a == i+k && b == j+h && board[a][b]){ // Check first place if its a king.
+						dest = board[a][b].getChar();
+						if (dest == 'k'-diff){
+							return false;
+						}
+						break;
+					}
 					if(board[a][b]){
 						dest = board[a][b].getChar();
 						if (dest == 'q'-diff){ return false; }
@@ -145,30 +152,6 @@ bool Game::isValidBoard(){
 						break;
 					}
 				}
-			}
-		}
-		if (i+1 < 8 && board[i+1][j]){
-			dest = board[i+1][j]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (i-1 < 8 && board[i-1][j]){
-			dest = board[i-1][j]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (j+1 < 8 && board[i][j+1]){
-			dest = board[i][j+1]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (j-1 < 8 && board[i][j-1]){
-			dest = board[i][j-1]->getChar();
-			if (dest == 'k'-diff){
-				return false;
 			}
 		}
 		if (i+1 < 8 && board[i+1][j+pawnDir]){
@@ -197,7 +180,7 @@ bool Game::isValidBoard(){
 				int a = knightVuln[i].first;
 				int b = knightVuln[i].second;
 				dest = board[a][b]->getChar();
-				if ( dest == 'k'-diff){
+				if ( dest == 'n'-diff){
 					return false;
 				}
 			}
