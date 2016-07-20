@@ -14,6 +14,7 @@ private:
 	bool doesCapture(int priority);
 	bool isSafe(int priority);
 public:
+    Game();
 	int tryMove(Move &attempt);
 	void setup();
 	bool isValidBoard();

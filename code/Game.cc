@@ -6,6 +6,46 @@
 #include "Piece.h"
 using namespace std;
 
+const char defaultBoard[8][8] = {{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, 
+                                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}, 
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                                {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}};
+
+Game::Game() {
+    Piece board** = new Piece*[8][8];
+    Piece *boardPtr;
+    boardPtr = board;
+    bool upperCase;
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            upperCase = defaultBoard[i][j] & ('a' - 'A');
+            char pieceChar = defaultBoard[i][j] | ('a' - 'A');
+            if(pieceChar) {
+                board[i][j] = nullptr;
+            } else {
+                if(pieceChar == 'r') {
+                    board[i][j] = new Rook(upperCase);
+                } else if(pieceChar == 'n') {
+                    board[i][j] = new Knight(upperCase);
+                } else if(pieceChar == 'b') {
+                    board[i][j] = new Bishop(upperCase);
+                } else if(pieceChar == 'q') {
+                    board[i][j] = new Queen(upperCase);
+                } else if(pieceChar == 'k') {
+                    board[i][j] = new King(upperCase);
+                } else {
+                    board[i][j] = new Pawn(upperCase);
+                }
+            }
+        }
+    }
+    this->board = boardPtr;
+}
+
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
