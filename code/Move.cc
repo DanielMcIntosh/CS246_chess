@@ -15,14 +15,7 @@ Move::Move(string s){
 	s >> sDest;
 	origin = Piece::convertCoords(sOrigin);
 	destination = Piece::convertCoords(sDest);
-	char pr;
-	ss >> ox;
-	ss >> oy;
-	ss >> dx;
-	ss >> dy;
-	ss >> pr;
-
-	pawnRep = pr;
+	ss >> pawnRep;
 }
 
 pair<int,int> Move::getOrigin(){
