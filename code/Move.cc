@@ -1,5 +1,6 @@
 #include <sstream>
 #include "Move.h"
+#include "Piece.h"
 
 using namespace std;
 
@@ -7,21 +8,20 @@ using namespace std;
 Move::Move(pair<int,int> o, pair<int,int> d, char pr): origin{o}, destination {d}, pawnRep {pr}{}
 
 Move::Move(string s){
+	string sOrigin;
+	string sDest;
 	istringstream ss{s};
-	char ox;
-	int oy;
-	char dx;
-	int dy;
+	s >> sOrigin;
+	s >> sDest;
+	origin = Piece::convertCoords(sOrigin);
+	destination = Piece::convertCoords(sDest);
 	char pr;
 	ss >> ox;
 	ss >> oy;
 	ss >> dx;
 	ss >> dy;
 	ss >> pr;
-	origin.first = ox - 'a';
-	origin.second = oy - 1;
-	destination.first = dx -'a';
-	destination.second = dy - 1;
+
 	pawnRep = pr;
 }
 
