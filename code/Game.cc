@@ -126,60 +126,25 @@ bool Game::isValidBoard(){
 			pawnDir = -1;
 		}
 		char dest;
-		for(int k = i+1; k < 8 ; ++k){
-			if (board[k][j]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i-1; k >= 0 ; --k){
-			if (board[k][j]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = j+1; k < 8 ; ++k){
-			if (board[k][j]){
-				dest = board[i][k]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = j-1; k >= 0 ; --k){
-			if (board[i][k]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i+1, int h = j+1; k < 8 && h < 8 ; ++k,++h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i-1, int h = j-1; k >= 0 && h >= 0 ; --k,--h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i+1, int h = j-1; k < 8 && h >= 0 ; ++k,--h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i-1, int h = j+1; k >= 0 && h < 8 ; --k,++h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
+		for(int k = -1; k <= 1 ; ++k){
+			for (int h = -1; h <= 1; ++h){
+				if (k == 0 && h == 0){
+					continue;
+				}
+				for(int a = i+k, int b = j+h; a >= 0 && a < 8 && b >= 0 && b < 8; a+k, b+h){
+					if(board[a][b]){
+						dest = board[a][b].getChar();
+						if (dest == 'q'-diff){ return false; }
+						if(abs(k)==1 && abs(h)==1 && dest == 'b'-diff){
+							return false;
+						} else {
+							if (dest == 'r'-diff){
+								return false;
+							}
+						}
+						break;
+					}
+				}
 			}
 		}
 		if (i+1 < 8 && board[i+1][j]){
