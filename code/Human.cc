@@ -8,5 +8,7 @@ Human::getMove() {
 		cin >> test;
 	} while(test != "move");
 
-	return Move(test);
+	string s;
+	s = cin.getline();
+	return Move(s);
 }
