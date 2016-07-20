@@ -104,7 +104,7 @@ bool Game::isValidBoard(){
 	for (int j = 0; j < 8; ++j){
 		char a = board[0][j]->getChar();
 		char b = board[7][j]->getChar();
-		if(a=='P'||b== 'p'){
+		if(a=='P'|| a== 'p' || b == 'P'||b== 'p'){
 			return false;
 		}
 	}
@@ -126,87 +126,37 @@ bool Game::isValidBoard(){
 			pawnDir = -1;
 		}
 		char dest;
-		for(int k = i+1; k < 8 ; ++k){
-			if (board[k][j]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
+
+		for(int k = -1; k <= 1 ; ++k){ // covers Rook, Queen, Bishop, Enemy King capture vulnerability.
+			for (int h = -1; h <= 1; ++h){
+				if (k == 0 && h == 0){
+					continue;
+				}
+				for(int a = i+k, int b = j+h; a >= 0 && a < 8 && b >= 0 && b < 8; a+k, b+h){
+					if (a == i+k && b == j+h && board[a][b]){ // Check first place if its a king.
+						dest = board[a][b].getChar();
+						if (dest == 'k'-diff){
+							return false;
+						}
+						break;
+					}
+					if(board[a][b]){
+						dest = board[a][b].getChar();
+						if (dest == 'q'-diff){ return false; }
+						if(abs(k)==1 && abs(h)==1 && dest == 'b'-diff){
+							return false;
+						} else {
+							if (dest == 'r'-diff){
+								return false;
+							}
+						}
+						break;
+					}
+				}
 			}
 		}
-		for(int k = i-1; k >= 0 ; --k){
-			if (board[k][j]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = j+1; k < 8 ; ++k){
-			if (board[k][j]){
-				dest = board[i][k]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = j-1; k >= 0 ; --k){
-			if (board[i][k]){
-				dest = board[k][j]->getChar();
-				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i+1, int h = j+1; k < 8 && h < 8 ; ++k,++h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i-1, int h = j-1; k >= 0 && h >= 0 ; --k,--h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i+1, int h = j-1; k < 8 && h >= 0 ; ++k,--h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		for(int k = i-1, int h = j+1; k >= 0 && h < 8 ; --k,++h){
-			if (board[k][h]){
-				dest = board[k][h]->getChar();
-				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
-				break;
-			}
-		}
-		if (i+1 < 8 && board[i+1][j]){
-			dest = board[i+1][j]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (i-1 < 8 && board[i-1][j]){
-			dest = board[i-1][j]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (j+1 < 8 && board[i][j+1]){
-			dest = board[i][j+1]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (j-1 < 8 && board[i][j-1]){
-			dest = board[i][j-1]->getChar();
-			if (dest == 'k'-diff){
-				return false;
-			}
-		}
-		if (i+1 < 8 && board[i+1][j+pawnDir]){
+
+		if (i+1 < 8 && board[i+1][j+pawnDir]){ // Covers pawn capture vulnerability
 			dest = board[i+1][j+pawnDir]->getChar();
 			if(dest == 'p'-diff){
 				return false;
@@ -218,7 +168,8 @@ bool Game::isValidBoard(){
 				return false;
 			}
 		}
-		pair<int,int> knightVuln [8];
+
+		pair<int,int> knightVuln [8]; // Covers Knight capture vulnerability
 		knightVuln[0] = make_pair(i+2,j+1);
 		knightVuln[1] = make_pair(i+2,j-1);
 		knightVuln[2] = make_pair(i-2,j+1);
@@ -232,7 +183,7 @@ bool Game::isValidBoard(){
 				int a = knightVuln[i].first;
 				int b = knightVuln[i].second;
 				dest = board[a][b]->getChar();
-				if ( dest == 'k'-diff){
+				if ( dest == 'n'-diff){
 					return false;
 				}
 			}
