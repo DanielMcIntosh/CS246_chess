@@ -263,4 +263,45 @@ ostream& Game::operator<<(ostream& os, const Game& gm) {
     return os;
 }
 
+void Game::setup()
+{
+	char c;
+	do {
+		string temp;
+		cin >> temp;
+		c = temp[0];
+		string s;
+		cin >> s;
+		if (c == '=')
+		{
+			//convert to lower case
+			for (int i = 0; i < s.length(); ++i)
+			{
+				s[i] |= 'a'-'A';
+			}
+			startPlayer = (s == "black") ? 1 : 0;
+			continue;
+		}
+		else if (c == '-')
+		{
+			pair<int, int> coords = Piece::convertCoords(s);
+			board[coords.first][coords.second] = nullptr;
+			continue;
+		}
+		else if (c == '+')
+		{
+			char pieceChar = s[0];
+			Piece *p = Piece::constructPiece(pieceChar);
+			string s2;
+			cin >> s2;
+			pair<int, int> coords = Piece::convertCoords(s2);
+			board[coords.first][coords.second] = p;
+			continue;
+		}
+	} while (c != 'd');
+}
 
+int Game::getStartPlayer()
+{
+	return startPlayer;
+}

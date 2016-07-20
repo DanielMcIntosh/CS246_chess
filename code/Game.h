@@ -7,6 +7,7 @@ class Piece;
 class Game {
 private:
 	Piece *board[8][8];
+	int startPlayer;
 	bool doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p);
 
 	bool causeCheck(int priority);
@@ -17,6 +18,7 @@ public:
 	void setup();
 	bool isValidBoard();
 	int executeMove(Move &m);
+	int getStartPlayer();
 };
 
 #endif

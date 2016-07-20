@@ -12,6 +12,7 @@ public:
 	virtual bool isValidCapture(std::pair<int,int> co)=0;
 	virtual std::vector<std::pair<int,int>> getMoveReq(std::pair<int,int> co)=0;
     virtual char getChar()=0;
+    static pair<int, int> convertCoords(string &s);
 };
 
 #endif
