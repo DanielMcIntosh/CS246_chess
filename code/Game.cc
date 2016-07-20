@@ -236,6 +236,7 @@ void Game::setup()
 		else if (c == '-')
 		{
 			pair<int, int> coords = Piece::convertCoords(s);
+			delete board[coords.first][coords.second];
 			board[coords.first][coords.second] = nullptr;
 			continue;
 		}
@@ -246,6 +247,7 @@ void Game::setup()
 			string s2;
 			cin >> s2;
 			pair<int, int> coords = Piece::convertCoords(s2);
+			delete board[coords.first][coords.second];
 			board[coords.first][coords.second] = p;
 			continue;
 		}

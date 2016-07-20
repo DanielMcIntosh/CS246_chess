@@ -5,8 +5,8 @@ Human::Human() {}
 Human::getMove() {
 	string test;
 	do {
-		test = cin.getLine();
-	} while(test.substr(0, 4) != "move");
+		cin >> test;
+	} while(test != "move");
 
 	return Move(test);
 }
