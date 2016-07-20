@@ -247,9 +247,7 @@ ostream& Game::operator<<(ostream& os, const Game& gm) {
 		os << (8 - i) << ' ';
 		for(int j = 0; j < 8; j++) {
 			if(gm.board[i][j] == nullptr) {
-				if(i % 2 == 0 && j % 2 == 0) {
-					os << ' ';
-				} else if (i % 2 == 1 && j & 2 == 1) {
+				if(i % 2 == j % 2) {
 					os << ' ';
 				} else {
 					os << '-';
