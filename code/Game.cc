@@ -86,7 +86,7 @@ bool Game::isValidBoard(){
 	pair<int,int> wk_pos(0,0);
 	for(int i = 0; i < 8; ++i){  // Checking there only exist 1 king of each colour
 		for (int j = 0; i < 8; ++j){
-			char c = board[i][j].getChar();
+			char c = board[i][j]->getChar();
 			if (c == 'K'){
 				++wking;
 				wk_pos.first = i;
@@ -102,8 +102,8 @@ bool Game::isValidBoard(){
 	}
 	// Check if there doesn't exist any Pawns on the first and last row.
 	for (int j = 0; j < 8; ++j){
-		char a = board[0][j].getChar();
-		char b = board[7][j].getChar();
+		char a = board[0][j]->getChar();
+		char b = board[7][j]->getChar();
 		if(a=='P'||b== 'p'){
 			return false;
 		}
@@ -128,76 +128,115 @@ bool Game::isValidBoard(){
 		char dest;
 		for(int k = i+1; k < 8 ; ++k){
 			if (board[k][j]){
-				dest = board[k][j].getChar();
+				dest = board[k][j]->getChar();
 				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = i-1; k >= 0 ; --k){
 			if (board[k][j]){
-				dest = board[k][j].getChar();
+				dest = board[k][j]->getChar();
 				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = j+1; k < 8 ; ++k){
 			if (board[k][j]){
-				dest = board[i][k].getChar();
+				dest = board[i][k]->getChar();
 				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = j-1; k >= 0 ; --k){
 			if (board[i][k]){
-				dest = board[k][j].getChar();
+				dest = board[k][j]->getChar();
 				if (dest == 'q'-diff || dest == 'r'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = i+1, int h = j+1; k < 8 && h < 8 ; ++k,++h){
 			if (board[k][h]){
-				dest = board[k][h].getChar();
+				dest = board[k][h]->getChar();
 				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = i-1, int h = j-1; k >= 0 && h >= 0 ; --k,--h){
 			if (board[k][h]){
-				dest = board[k][h].getChar();
+				dest = board[k][h]->getChar();
 				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = i+1, int h = j-1; k < 8 && h >= 0 ; ++k,--h){
 			if (board[k][h]){
-				dest = board[k][h].getChar();
+				dest = board[k][h]->getChar();
 				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
 				break;
 			}
 		}
 		for(int k = i-1, int h = j+1; k >= 0 && h < 8 ; --k,++h){
 			if (board[k][h]){
-				dest = board[k][h].getChar();
+				dest = board[k][h]->getChar();
 				if (dest == 'q'-diff || dest == 'b'-diff){ return false; }
 				break;
 			}
 		}
+		if (i+1 < 8 && board[i+1][j]){
+			dest = board[i+1][j]->getChar();
+			if (dest == 'k'-diff){
+				return false;
+			}
+		}
+		if (i-1 < 8 && board[i-1][j]){
+			dest = board[i-1][j]->getChar();
+			if (dest == 'k'-diff){
+				return false;
+			}
+		}
+		if (j+1 < 8 && board[i][j+1]){
+			dest = board[i][j+1]->getChar();
+			if (dest == 'k'-diff){
+				return false;
+			}
+		}
+		if (j-1 < 8 && board[i][j-1]){
+			dest = board[i][j-1]->getChar();
+			if (dest == 'k'-diff){
+				return false;
+			}
+		}
 		if (i+1 < 8 && board[i+1][j+pawnDir]){
-			dest = board[i+1][j+pawnDir].getChar();
+			dest = board[i+1][j+pawnDir]->getChar();
 			if(dest == 'p'-diff){
 				return false;
 			}
 		}
 		if (i-1 >= 0 && board[i-1][j+pawnDir]){
-			dest = board[i-1][j+pawnDir].getChar();
+			dest = board[i-1][j+pawnDir]->getChar();
 			if(dest == 'p'-diff){
 				return false;
 			}
-		}	
-		for (int i = 0; i < 8; ++i){
-			
 		}
-
+		pair<int,int> knightVuln [8];
+		knightVuln[0] = make_pair(i+2,j+1);
+		knightVuln[1] = make_pair(i+2,j-1);
+		knightVuln[2] = make_pair(i-2,j+1);
+		knightVuln[3] = make_pair(i-2,j-1);
+		knightVuln[4] = make_pair(i+1,j+2);
+		knightVuln[5] = make_pair(i+1,j-2);
+		knightVuln[6] = make_pair(i-1,j+2);
+		knightVuln[7] = make_pair(i-1,j-2);
+		for(int i = 0; i < 8; ++i){
+			if (knightVuln[i].first >= 0 && knightVuln[i].first < 8 && knightVuln[i].second >= 0 && knightVuln[i].second < 8){
+				int a = knightVuln[i].first;
+				int b = knightVuln[i].second;
+				dest = board[a][b]->getChar();
+				if ( dest == 'k'-diff){
+					return false;
+				}
+			}
+		}
 	}
 	return true;
 }
