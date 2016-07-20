@@ -20,6 +20,7 @@ public:
 	bool isValidBoard();
 	int executeMove(Move &m);
 	int getStartPlayer();
+    ~Game();
 };
 
 #endif
