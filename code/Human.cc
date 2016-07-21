@@ -1,12 +1,34 @@
 #include "Human.h"
+#include <string>
+#include <sstream>
+
+using namespace std;
 
 Human::Human() {}
 
 Human::getMove() {
 	string test;
 	do {
-		test = cin.getLine();
-	} while(test.substr(0, 4) != "move");
+		cin >> test;
+	} while(test != "move" && test != "resign");
 
-	return Move(test);
+	if (test == "move")
+	{
+		string s;
+		s = cin.getline();
+		istringstream ss {s};
+		string origin;
+		string dest;
+		ss >> origin;
+		ss >> dest;
+		if (origin == dest)
+		{
+			cerr << "Invalid move: origin and destination are the same!";
+		}
+		return Move(s);
+	}
+	else
+	{
+		return Move(make_pair(0, 0), make_pair(0, 0), 0);
+	}
 }
