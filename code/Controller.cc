@@ -58,20 +58,19 @@ void runGame(Player *p[]){
 	}
 }
 
+//returns false when endgame state reached
 bool reactToState(int state, int curPlayer){
-	if (state == 3){
+	if (state == 3){ //check mate
 		cout << "Checkmate! ";
 	}
-	if (state >= 2){
+	if (state >= 2){ //any win (resign or checkmate)
 		cout << (((bool)curPlayer == (bool)(state%2)) ? "Black" : "White") << " wins!" << endl;
-		return false;
-	} else if (state == 1){
+	} else if (state == 1){ //stalemate
 		cout << "Stalemate!" << endl;
-		return false;
-	} else if (state == -1){
-		return true;
-	} else {
+	} else if (state == -1){} //normal
+	else if (state == -2){ //check
 		cout << (curPlayer ? "White" : "Black") << " is in check." << endl;
-		return true;
 	}
+
+	return (state < 0);
 }
