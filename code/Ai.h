@@ -7,7 +7,7 @@
 
 class Ai: public Player{
 private:
-	vector< pair<int, int> > myPieces
+	vector< pair<int, int> > myPieces;
 public:
 	Ai(int lvl);
 };
