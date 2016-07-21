@@ -26,13 +26,19 @@ int main(){
 				string arg;
 				cin >> arg;
 				if (arg == "human"){
-					p[i] = &Human(); 
+					p[i] = new Human(); 
 				} else {
 					int lvl = arg[9] - '0';
-					p[i] = &Ai(lvl);
+					p[i] = new Ai(lvl);
 				}
 			}
 			runGame(p);
+
+			for (int i = 0; i < numPlayers; ++i)
+			{
+				delete p[i];
+			}
+
 		} else {
 			cerr << "Invalid Command! Please enter setup or game." << endl;
 		}
@@ -40,6 +46,7 @@ int main(){
 	cout << "Final Score:" << endl;
 	cout << "White: " << score[0] << endl;
 	cout << "Black: " << score[1] << endl;
+
 }
 
 

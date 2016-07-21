@@ -2,7 +2,7 @@
 #define _CONTROLLER_
 
 class Player;
-void runGame(Player p[]);
+void runGame(Player *p[]);
 bool reactToState(int state, int curPlayer);
 
 #endif

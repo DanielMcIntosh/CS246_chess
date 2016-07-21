@@ -1,6 +1,8 @@
 #ifndef _GAME_
 #define _GAME_
 
+#include <utility>
+
 class Move;
 class Piece;
 
@@ -14,23 +16,15 @@ private:
 	bool doesCapture(int priority);
 	bool isSafe(int priority);
 public:
-<<<<<<< HEAD
     Game();
-=======
-	Game();
 	~Game();
->>>>>>> origin/master
 	int tryMove(Move &attempt);
 	void setup();
 	bool isValidBoard();
-	pair<int,int> isThreatened(pair<int,int> co, bool colour);
+	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour);
 	int executeMove(Move &m);
 	int getStartPlayer();
-<<<<<<< HEAD
-    ~Game();
-=======
 	friend ostream& Game::operator<<(ostream& os, const Game& gm);
->>>>>>> origin/master
 };
 
 #endif

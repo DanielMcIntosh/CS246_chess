@@ -6,6 +6,7 @@
 class Human: public Player{
 public:
 	Human();
+	Move getMove(Game *g);
 };
 
 #endif

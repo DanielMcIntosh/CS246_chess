@@ -6,7 +6,7 @@ using namespace std;
 
 Human::Human() {}
 
-Human::getMove() {
+Move Human::getMove(Game *g) {
 	string test;
 	do {
 		cin >> test;

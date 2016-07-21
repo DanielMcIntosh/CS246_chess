@@ -2,14 +2,16 @@
 #define _AI_
 
 #include <vector>
+#include <utility>
 
 #include "Player.h"
 
 class Ai: public Player{
 private:
-	vector< pair<int, int> > myPieces;
+	std::vector< std::pair<int, int> > myPieces;
 public:
 	Ai(int lvl);
+	Move getMove(Game *g);
 };
 
 #endif
