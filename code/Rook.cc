@@ -19,8 +19,8 @@ bool Rook::isValid(pair<int, int> co) {
 bool Rook::isValidMove(std::pair<int,int> co) {isValid(co);}
 bool Rook::isValidCapture(std::pair<int,int> co) {isValid(co);}
 
-vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {
-    vector<pair<int,int>> req = {};
+vector<pair<int,int> > Rook::getMoveReq(pair<int,int> co) {
+    vector<pair<int,int> > req = {};
     if(co.second == 0) {
         for(int i = 1; i < co.first; i++) {
             pair<int,int> temp(i, 0);

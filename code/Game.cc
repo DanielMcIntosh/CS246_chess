@@ -137,10 +137,15 @@ bool Game::isValidBoard(){
 		}
 	}
 	// Check for check mate situations (Vulnerability to Queen, Bishop and Rook).
-	if(isThreatened(wk_pos,false)){
-		retun false;
+	pair<int,int> wkThreat == isThreatened(wk_pos,false);
+	if (wkThreat.first >= 0 && wkThreat.second >= 0){
+		return false;
 	}
-	return !isThreatened(bk_pos,true);
+	pair<int,int> bkThreat == isThreatened(bk_pos,true);
+	if (bkThreat.first >= 0 && bkThreat.second >= 0){
+		return false;
+	}
+	return true;
 }
 
 
@@ -210,7 +215,8 @@ int Game::getStartPlayer()
 	return startPlayer;
 }
 
-bool Game::isThreatened(pair<int,int> co, bool colour){
+//checks if a (theoretical) piece at co from the player designated by colour would be under threat
+pair<int,int> Game::isThreatened(pair<int,int> co, bool colour){
 	int i = co.first;
 	int j = co.second;
 	int diff = 0;
@@ -232,18 +238,19 @@ bool Game::isThreatened(pair<int,int> co, bool colour){
 				if (a == i+dx && b == j+dy && board[a][b]){ // Check first place if its a king.
 					dest = board[a][b]->getChar();
 					if (dest == 'k'-diff){
-						return true;
+						return make_pair(a,b);
 				}
 				break;
 				}
 				if(board[a][b]){
 					dest = board[a][b]->getChar();
-					if (dest == 'q'-diff){ return true; }
+					if (dest == 'q'-diff){ 
+						return make_pair(a,b); }
 					if(abs(dx)==1 && abs(dy)==1 && dest == 'b'-diff){
-						return true;
+						return make_pair(a,b);
 					} else {
 						if (dest == 'r'-diff){
-							return true;
+							return make_pair(a,b);
 						}
 					}
 					break;
@@ -255,13 +262,13 @@ bool Game::isThreatened(pair<int,int> co, bool colour){
 	if (i+1 < 8 && board[i+1][j+pawnDir]){ // Covers pawn capture vulnerability
 		dest = board[i+1][j+pawnDir]->getChar();
 		if(dest == 'p'-diff){
-			return true;
+			return make_pair(i+1,j+pawnDir);
 		}
 	}
 	if (i-1 >= 0 && board[i-1][j+pawnDir]){
 		dest = board[i-1][j+pawnDir]->getChar();
 		if(dest == 'p'-diff){
-			return true;
+			return make_pair(i-1,j+pawnDir);
 		}
 	}
 
@@ -280,11 +287,11 @@ bool Game::isThreatened(pair<int,int> co, bool colour){
 			int b = knightVuln[i].second;
 			dest = board[a][b]->getChar();
 			if ( dest == 'n'-diff){
-				return true;
+				return make_pair(a,b);
 			}
 		}
 	}
-	return false;
+	return make_pair(-1,-1);
 }
 
 
@@ -301,11 +308,13 @@ int Game::executeMove(Move &m){
 	if (!doesBoardPermit(origin.first,origin.second,dest.first,dest.second,p)){
 		return state_invalid;
 	}
-	//bool curColour = board[origin.first][origin.second]->getColour();
+	bool curColour = board[origin.first][origin.second]->getColour();
 	pair <int,int> kingCords [2];
 	Piece * temp = board[dest.first][dest.second];
 	board[dest.first][dest.second] = p;
 	board[origin.first][origin.second] = nullptr;
+	
+	// search for kings positions
 	for(int x = 0, kingsFound = 0; kingsFound < 2 && x < 8; ++x){
 		for(int y = 0; y < 8 && kingsFound < 2; ++y){
 			if(board[x][y]){
@@ -320,28 +329,71 @@ int Game::executeMove(Move &m){
 					++kingFound;
 				}
 			}
+		}
+	}
+
+	//exposing self to check
+	pair<int,int> ourKingThreat = isThreatened(kingCords[curColour? 1:0],curColour);
+	if (ourKingThreat.first >= 0 || ourKingThreat.second >= 0){
+			board[origin.first][origin.second] = board[dest.first][dest.second]; 
+			board[dest.first][dest.second] = temp;
+			return state_invalid;
+	}
+	delete temp;
+
+	// check and check mate verification
+	eKingCoords = kingCords[curColour? 0:1];
+	pair<int,int> enemyKingThreat =isThreatened(eKingCords, !curColour);
+	if(enemyKingThreat.first >= 0 || enemyKingThreat.second >= 0){
+		Piece * threatPiece = board[enemyKingThreat.first][enemyKingThreat.second];
+		for(int dx =-1; dx <= 1; ++dx){
+			for(int dy = -1; dy <= 1; ++dy){
+				if(dx == 0 && dy ==0){
+					continue;
+				}
+				if(!board[eKingCords.first+dx][eKingCords+dy]){
+					pair<int,int> result = isThreatened(make_pair(eKingCords.first+dx,eKingCords+dy),!curColour);
+					if(result.first < 0 || result.second < 0){
+						return state_check;
+					}
+				}
+			}
+		}
+		vector< pair<int,int>> moveReq = threatPiece.getMoveReq(make_pair(eKingCords.first-enemyKingThreat.first,eKingCords.second-enemyKingThreat.second));
+		for(auto n: moveReq){
+			n.first += enemyKingThreat.first;
+			n.second += enemyKingThreat.second;
+			pair<int,int> result = isThreatened(n,curColour);
+			if(result.first >= 0 || result.second >= 0){
+				return state_check;
+			}
+		}
+		return state_mate;
 	}
 
 
-
-
-
-
-
+	//stale check
 	for(int x = 0; x < 8 ; ++x){
 		for (int y = 0; y < 8; ++y){
 			Piece * curPiece = board[x][y];
+			if(!curPiece){
+				continue;
+			}
 			for(int x2 = 0; x2 < 8 ; ++x2){
 				for(int y2 = 0; y2 < 8 ; ++y2){
 					if (x == x2 && y == y2){
 						continue;
 					}
+					if(!board[x1][x2]){
+						continue;
+					}
 					if (doesBoardPermit(x,y,x2,y2,curPiece)){
-						return state_invalid;
+						return state_normal;
 					}
 				}
 			}
 
 		}
 	}
+	return state_stale;
 }
