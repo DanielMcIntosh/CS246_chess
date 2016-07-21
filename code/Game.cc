@@ -11,7 +11,7 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
 		return false;
 	pair<int, int> diff = make_pair(x2-x1, y2-y1);
-	if (!p->isValid(diff))
+	if ((!board[x2][y2] && !p->isValidMove(diff)) || (board[x2][y2] && !p->isValidCapture(diff)))
 		return false;
 
 	vector< pair<int, int> > moveReq = p->getMoveReq(diff);
