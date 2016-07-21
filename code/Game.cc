@@ -20,6 +20,26 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 		if (board[x1+i->first][y1+i->second])
 			return false;
 	}
+
+	//check if the king is moving into check
+	if (p.getChar() | ('a' - 'A') == 'k')
+	{
+		for (int x = 0; x < 8; ++x)
+		{
+			for (int y = 0; y < 8; ++y)
+			{
+				Piece *enemy = board[x][y];
+				if (enemy && !enemy->isValidCapture(make_pair(x2-x, y2-y)))
+					return continue;
+				vector< pair<int, int> > enemyMoveReq = enemy->getMoveReq();
+				for (pair<int, int> *i = enemyMoveReq.begin(); i != enemyMoveReq.end(); ++i)
+				{
+					if (board[x+i->first][x+i->second])
+						break;
+				}
+			}
+		}
+	}
 	return true;
 }
 
