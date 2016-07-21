@@ -17,8 +17,10 @@ public:
 	int tryMove(Move &attempt);
 	void setup();
 	bool isValidBoard();
+	pair<int,int> isThreatened(pair<int,int> co, bool colour);
 	int executeMove(Move &m);
 	int getStartPlayer();
+	friend ostream& Game::operator<<(ostream& os, const Game& gm);
 };
 
 #endif
