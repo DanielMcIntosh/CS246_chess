@@ -6,7 +6,6 @@
 #include "Piece.h"
 using namespace std;
 
-<<<<<<< HEAD
 const char defaultBoard[8][8] = {{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, 
                                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}, 
                                 {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -46,15 +45,13 @@ Game::Game() {
     }
     this->board = boardPtr;
 }
-=======
+
 #define state_resign 2
 #define state_mate 3
 #define state_stale 1
 #define state_invalid 0
 #define state_normal -1
 #define state_check -2
-
->>>>>>> origin/master
 
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
@@ -257,7 +254,6 @@ int Game::getStartPlayer()
 	return startPlayer;
 }
 
-<<<<<<< HEAD
 Game::~Game() {
     char piece;
     for(int i = 0; i < 8; i++) {
@@ -270,7 +266,7 @@ Game::~Game() {
     delete [] this->board;
     this->board = nullptr;
 }
-=======
+
 //checks if a (theoretical) piece at co from the player designated by colour would be under threat
 pair<int,int> Game::isThreatened(pair<int,int> co, bool colour){
 	int i = co.first;
@@ -453,7 +449,6 @@ int Game::executeMove(Move &m){
 	}
 	return state_stale;
 }
->>>>>>> origin/master
     
 Game::~Game() {
     char piece;
