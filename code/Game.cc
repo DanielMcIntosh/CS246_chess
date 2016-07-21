@@ -454,3 +454,16 @@ int Game::executeMove(Move &m){
 	return state_stale;
 }
 >>>>>>> origin/master
+    
+Game::~Game() {
+    char piece;
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            if(this->board[i][j] != nullptr) {
+                ~this->board[i][j]();
+            }
+        }
+    }
+    delete [] this->board;
+    this->board = nullptr;
+}
