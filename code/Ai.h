@@ -11,8 +11,9 @@ class Game;
 class Ai: public Player{
 private:
 	std::vector< std::pair<int, int> > myPieces;
+	int lvl;
 public:
-	Ai(int lvl);
+	Ai(int lvl, std::vector< std::pair<int, int> > myPieces);
 	Move getMove(Game *g);
 };
 

@@ -192,7 +192,7 @@ ostream& operator<<(ostream& os, const Game& gm) {
     return os;
 }
 
-void Game::setup()
+void Game::setup(vector< pair<int, int> > playerPieces[])
 {
 	char c;
 	do {
@@ -214,8 +214,18 @@ void Game::setup()
 		else if (c == '-')
 		{
 			pair<int, int> coords = Piece::convertCoords(s);
+			bool pieceColour = board[coords.first][coords.second] & ('a' - 'A');
 			delete board[coords.first][coords.second];
 			board[coords.first][coords.second] = nullptr;
+
+			vector< pair<int, int> > pieces = playerPieces[pieceColour ? 1 : 0];
+			for (int i = 0; i < pieces.size(); ++i)
+			{
+				if (pieces[i] == coords)
+				{
+					pieces.erase(pieces.begin()+i);
+				}
+			}
 			continue;
 		}
 		else if (c == '+')
@@ -225,8 +235,24 @@ void Game::setup()
 			string s2;
 			cin >> s2;
 			pair<int, int> coords = Piece::convertCoords(s2);
+
+			if (board[coords.first][coords.second])
+			{
+				bool originalColour = board[coords.first][coords.second]->getChar() & ('a' - 'A');	
+				vector< pair<int, int> > pieces = playerPieces[originalColour ? 0 : 1];
+				for (int i = 0; i < pieces.size(); ++i)
+				{
+					if (pieces[i] == coords)
+					{
+						pieces.erase(pieces.begin()+i);
+						break;
+					}
+				}
+			}
+
 			delete board[coords.first][coords.second];
 			board[coords.first][coords.second] = p;
+			playerPieces[(pieceChar & ('a' - 'A')) ? 1 : 0].push_back(coords);
 			continue;
 		}
 	} while (c != 'd');

@@ -14,12 +14,25 @@
 using namespace std;
 
 int main(){
-	Game * curGame = new Game(); // need edit
+	Game * curGame = new Game();
 	int score [numPlayers] = {0};
+
+	vector< pair<int, int>> playerPieces[numPlayers]{};
+	for (int i = 0; i < numPlayers; ++i)
+	{
+		int y = i ? 6 : 0;
+		for (int x = 0; x < 8; ++x)
+		{
+			playerPieces[i].push_back(make_pair(x, y));
+			playerPieces[i].push_back(make_pair(x, y+1));
+		}
+	}
+
+
 	string input;
 	while (cin>>input){
 		if (input == "setup"){
-			curGame->setup();
+			curGame->setup(playerPieces);
 		} else if (input == "game"){
 			Player *p[numPlayers];
 			for (int i = 0 ; i < numPlayers; ++i){
@@ -29,7 +42,7 @@ int main(){
 					p[i] = new Human();
 				} else {
 					int lvl = arg[9] - '0';
-					p[i] = new Ai(lvl);
+					p[i] = new Ai(lvl, playerPieces[i]);
 				}
 			}
 
