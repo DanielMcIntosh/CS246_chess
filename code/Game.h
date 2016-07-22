@@ -14,10 +14,10 @@ private:
 	int startPlayer;
 	bool doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p);
 
+public:
 	bool causeCheck(int priority);
 	bool doesCapture(int priority);
 	bool isSafe(int priority);
-public:
     Game();
 	~Game();
 	int tryMove(Move &attempt, int priorityMask);
