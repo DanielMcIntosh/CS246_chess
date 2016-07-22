@@ -20,8 +20,9 @@ pair<int, int> Piece::convertCoords(string &s)
 
 Piece *Piece::constructPiece(char c)
 {
+    bool colour = c & ('a' - 'A');
 	c |=  ('a' - 'A');
-	bool colour = c & ('a' - 'A');
+
     if(c == 'r') {
         return new Rook(colour);
     } else if(c == 'n') {

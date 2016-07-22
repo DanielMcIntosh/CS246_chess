@@ -12,6 +12,8 @@ char Pawn::getChar() {return colour ? 'p' : 'P';};
 
 bool Pawn::isValidMove(pair<int, int> co) {
     cout << "pawn 1" << endl;
+    cout << "first move = " << firstMove << endl;
+    cout << "colour = " << colour << endl;
     int dir = 1;
     if (this->colour) { dir = -1;}
 
@@ -24,7 +26,6 @@ bool Pawn::isValidMove(pair<int, int> co) {
     } else {
         return false;
     }
-    cout << "pawn 3" << endl;
 }
 
 bool Pawn::isValidCapture(pair<int, int> co) {

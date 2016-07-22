@@ -22,10 +22,12 @@ public:
 	int tryMove(Move &attempt, int priorityMask);
 	void setup();
 	bool isValidBoard();
-	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour);
+	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour, bool checkingCapture);
 	int executeMove(Move &m);
 	int getStartPlayer();
 	friend std::ostream& operator<<(std::ostream& os, const Game& gm);
+	static bool isInBounds(std::pair<int, int> co);
+	static bool isInBounds(int x, int y);
 };
 
 #endif

@@ -6,7 +6,7 @@ using namespace std;
 
 Knight::Knight(bool c): Piece{c} {}
 
-char Knight::getChar() {return colour ? 'k' : 'K';}
+char Knight::getChar() {return colour ? 'n' : 'N';}
 
 bool Knight::isValid(pair<int, int> co) {
     if(co.first == 1 || co.first == -1) {

@@ -15,6 +15,7 @@ using namespace std;
 
 int main(){
 	Game * curGame = new Game(); // need edit
+	cout << *curGame;
 	int score [numPlayers] = {0};
 	string input;
 	while (cin>>input){
@@ -65,7 +66,7 @@ void runGame(Player *p[], Game *curGame){
 			continue;
 		}
 		result = reactToState(moveResult,(moveCount + start)%numPlayers);
-		cout << curGame;
+		cout << *curGame;
 	}
 }
 
