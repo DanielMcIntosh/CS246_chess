@@ -36,18 +36,44 @@ Game::Game() {
 
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
+	#ifdef inDebug
+	cout << "test doesBoardPermit 0" << endl;
+	#endif
+
 	if (!Game::isInBounds(x2, y2))
 		return false;
 	pair<int, int> diff = make_pair(x2-x1, y2-y1);
+
+	#ifdef inDebug
+	cout << "test doesBoardPermit 0.5" << endl;
+	cout << "piece = " << p->getChar() << endl;
+	cout << "origin = " << x1 << ", " << y1 << endl;
+	cout << "destination = " << x2 << ", " << y2 << endl;
+	#endif
+
 	if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
 		return false;
+
+	#ifdef inDebug
+	cout << "test doesBoardPermit 1" << endl;
+	cout << "moveReq = {";
+	#endif
 
 	vector< pair<int, int> > moveReq = p->getMoveReq(diff);
 	for (auto n: moveReq)
 	{
+		#ifdef inDebug
+		cout << "<" << n.first << ", " << n.second << ">, ";
+		#endif
 		if (board[x1+n.first][y1+n.second])
 			return false;
 	}
+
+	#ifdef inDebug
+	cout << "}" << endl;
+	cout << "test doesBoardPermit 2" << endl;
+	#endif
+
 
 	//check if the king is moving into check
 	if ((p->getChar() | ('a' - 'A')) == 'k')
@@ -68,11 +94,20 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			}
 		}
 	}
+
+	#ifdef inDebug
+	cout << "test doesBoardPermit 3" << endl;
+	#endif
+
 	return true;
 }
 
 int Game::tryMove(Move &attempt, int priorityMask)
 {
+	#ifdef inDebug
+	cout << "test tryMove 0" << endl;
+	#endif
+
 	int x1 = attempt.getOrigin().first;
 	int y1 = attempt.getOrigin().second;
 	int x2 = attempt.getDest().first;
@@ -83,10 +118,19 @@ int Game::tryMove(Move &attempt, int priorityMask)
 	if (!doesBoardPermit(x1, y1, x2, y2, p))
 		return 0;
 
+	#ifdef inDebug
+	cout << "test tryMove 1" << endl;
+	#endif
+
 	int movePriority = 0b1001; //2^0 = valid, 2^1 = checking move, 2^2 = capturing move, 2^3 = avoids capture
 
 	//check the board to see if this move puts opponent in check, or if it moves the piece into a threatened location
 	bool kingFound = !causeCheck(priorityMask);
+
+	#ifdef inDebug
+	cout << "test tryMove 2" << endl;
+	#endif
+
 	for (int x = 0; x < 8 && (!kingFound || isSafe(movePriority&priorityMask)); ++x)
 	{
 		for (int y = 0; (!kingFound || isSafe(movePriority&priorityMask)) && y < 8; ++y)
@@ -105,6 +149,10 @@ int Game::tryMove(Move &attempt, int priorityMask)
 			}
 		}
 	}
+
+	#ifdef inDebug
+	cout << "test tryMove 3" << endl;
+	#endif
 
 	if (board[x2][y2] && board[x2][y2]->getColour() != p->getColour())
 	{
@@ -382,7 +430,7 @@ int Game::executeMove(Move &m){
 	if(origin.first == dest.first && origin.second == dest.second){
 		return state_resign;
 	}
-	Piece * p = board[origin.first][origin.second];
+	Piece *p = board[origin.first][origin.second];
 
 	if (!p)
 	{
@@ -444,6 +492,8 @@ int Game::executeMove(Move &m){
 
 			return state_invalid;
 	}
+
+	//move is known to be valid, proceed with making changes to board permanent
 	delete temp;
 
 	// check and check mate verification

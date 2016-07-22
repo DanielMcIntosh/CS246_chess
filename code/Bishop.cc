@@ -10,7 +10,7 @@ Bishop::Bishop(bool c): Piece{c} {}
 bool Bishop::isValid(pair<int,int> co){
 	int x = co.first;
 	int y = co.second;
-	if (x/y == 1 || x/y == -1){
+	if (x == y || x == -1*y){
 		return true;
 	}
 	return false;

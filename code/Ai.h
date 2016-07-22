@@ -16,6 +16,7 @@ private:
 public:
 	Ai(int lvl, bool colour, std::vector< std::pair<int, int> > myPieces);
 	Move getMove(Game *g);
+	void removePiece(std::pair<int, int> piece);
 };
 
 #endif

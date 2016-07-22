@@ -9,6 +9,7 @@ class Human: public Player{
 public:
 	Human();
 	Move getMove(Game *g) override;
+	void removePiece(std::pair<int, int> toRemove);
 };
 
 #endif

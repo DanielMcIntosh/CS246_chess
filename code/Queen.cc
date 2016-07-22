@@ -10,13 +10,7 @@ Queen::Queen(bool c): Piece{c} {}
 bool Queen::isValid(pair<int,int> co){
 	int x = co.first;
 	int y = co.second;
-    if (x == 0) {
-        return (y != 0);
-    } else if (y == 0) {
-        return (x != 0);
-    } else {
-    	return (x == y || x == y*(-1));
-	}
+    return ((x || y) && (!x || !y || abs(x) == abs(y)));
 }
 
 bool Queen::isValidMove(std::pair<int,int> co) {return isValid(co);}

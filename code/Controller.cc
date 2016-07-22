@@ -81,6 +81,8 @@ void runGame(Player *p[], Game *curGame){
 			cerr << "Invalid Move" << endl;
 			continue;
 		}
+		p[(moveCount + start + 1)%numPlayers]->removePiece(m.getDest());
+
 		result = reactToState(moveResult,(moveCount + start)%numPlayers);
 		cout << *curGame;
 	}

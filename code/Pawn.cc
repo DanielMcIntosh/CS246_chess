@@ -41,7 +41,7 @@ bool Pawn::isValidCapture(pair<int, int> co) {
 
 vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {
     vector<pair<int,int>> req = {};
-    if (co.second == 2) {
+    if (abs(co.second) == 2) {
         pair<int, int> temp(0, 1);
         req.emplace_back(temp);
     }

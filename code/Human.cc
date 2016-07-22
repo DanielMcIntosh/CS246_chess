@@ -34,3 +34,5 @@ Move Human::getMove(Game *g) {
 		return Move(make_pair(0, 0), make_pair(0, 0), 0);
 	}
 }
+
+void Human::removePiece(std::pair<int, int> piece){}
