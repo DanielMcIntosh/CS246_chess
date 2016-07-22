@@ -1,0 +1,9 @@
+things to do on Sunday:
+1) Make sure Set Up + Load is done
+2) Special Rules
+3) AI
+4) Make sure to get all incorrect responses/input
+5) Test all piece behaviours
+6) Documentation + Final UML
+7) Graphics
+8) Full Checkmate
