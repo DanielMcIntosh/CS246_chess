@@ -22,7 +22,7 @@ public:
 	int tryMove(Move &attempt, int priorityMask);
 	void setup();
 	bool isValidBoard();
-	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour, bool checkingCapture);
+	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour, bool checkingCapture, bool ignoreKing);
 	int executeMove(Move &m);
 	int getStartPlayer();
 	friend std::ostream& operator<<(std::ostream& os, const Game& gm);
