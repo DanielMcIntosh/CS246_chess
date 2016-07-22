@@ -21,7 +21,7 @@ public:
     Game();
 	~Game();
 	int tryMove(Move &attempt, int priorityMask);
-	void setup(std::vector< std::pair<int, int> > playerPieces);
+	void setup(std::vector< std::pair<int, int> > playerPieces[]);
 	bool isValidBoard();
 	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour, bool checkingCapture, bool ignoreKing);
 	int executeMove(Move &m);

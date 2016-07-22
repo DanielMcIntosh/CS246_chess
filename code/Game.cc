@@ -214,7 +214,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 		else if (c == '-')
 		{
 			pair<int, int> coords = Piece::convertCoords(s);
-			bool pieceColour = board[coords.first][coords.second] & ('a' - 'A');
+			bool pieceColour = board[coords.first][coords.second]->getChar() & ('a' - 'A');
 			delete board[coords.first][coords.second];
 			board[coords.first][coords.second] = nullptr;
 

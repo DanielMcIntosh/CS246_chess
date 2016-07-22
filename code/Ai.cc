@@ -1,8 +1,12 @@
 #include "Ai.h"
 #include "Move.h"
+#include "Game.h"
 
 #include <vector>
 #include <utility>
+#include <iostream>
+#include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -18,8 +22,8 @@ Move Ai::getMove(Game *g)
 		{
 			for (int y = 0; y < 8; ++y)
 			{
-				Move curMove(*i, make_pair(x, y), colour ? 'q' : 'Q');
-				int curPriority = Game->tryMove(curMove, priorityMasks[this->lvl]);
+				Move curMove(i, make_pair(x, y), colour ? 'q' : 'Q');
+				int curPriority = g->tryMove(curMove, priorityMasks[this->lvl]);
 				if (curPriority > maxPriority)
 				{
 					topMoves.clear();

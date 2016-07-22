@@ -42,7 +42,7 @@ int main(){
 					p[i] = new Human();
 				} else {
 					int lvl = arg[9] - '0';
-					p[i] = new Ai(lvl, playerPieces[i]);
+					p[i] = new Ai(lvl, (bool)i, playerPieces[i]);
 				}
 			}
 
