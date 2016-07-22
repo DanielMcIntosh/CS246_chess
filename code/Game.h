@@ -1,6 +1,7 @@
 #ifndef _GAME_
 #define _GAME_
 
+#include <vector>
 #include <utility>
 #include <iostream>
 
@@ -20,7 +21,7 @@ public:
     Game();
 	~Game();
 	int tryMove(Move &attempt, int priorityMask);
-	void setup();
+	void setup(std::vector< std::pair<int, int> > playerPieces);
 	bool isValidBoard();
 	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour, bool checkingCapture, bool ignoreKing);
 	int executeMove(Move &m);
