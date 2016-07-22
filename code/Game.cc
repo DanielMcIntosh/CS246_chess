@@ -5,6 +5,8 @@
 #include "Move.h"
 #include "Piece.h"
 
+#define inDebug
+
 using namespace std;
 
 const char defaultBoard[8][8] = {{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
@@ -34,17 +36,11 @@ Game::Game() {
 
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
-	cout << "1" << endl;
 	if (!Game::isInBounds(x2, y2))
 		return false;
 	pair<int, int> diff = make_pair(x2-x1, y2-y1);
-	cout << "1.5" << endl;
-	cout << "origin = " << x1 << ", " << y1 << endl;
-	cout << "dest = " << x2 << ", " << y2 << endl;
-	cout << p->getChar() << endl;
 	if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
 		return false;
-	cout << "2" << endl;
 
 	vector< pair<int, int> > moveReq = p->getMoveReq(diff);
 	for (auto n: moveReq)
@@ -53,7 +49,6 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			return false;
 	}
 
-	cout << "3" << endl;
 	//check if the king is moving into check
 	if ((p->getChar() | ('a' - 'A')) == 'k')
 	{
@@ -73,7 +68,6 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			}
 		}
 	}
-	cout << "4" << endl;
 	return true;
 }
 
@@ -245,10 +239,14 @@ int Game::getStartPlayer()
 
 //checks if a (theoretical) piece at co from the player designated by colour would be under threat
 pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCapture, bool ignoreKing){
-	cout << "test a0" << endl;
 	int x = co.first;
 	int y = co.second;
+
+	#ifdef inDebug
+	cout << "test a0" << endl;
 	cout << "testing whether square " << x << ", " << y << " is threatened" << endl;
+	#endif
+
 	int diff = 0;
 	int pawnDir;
 	if (!colour){
@@ -258,7 +256,11 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 		diff = 'a' - 'A';
 		pawnDir = -1;
 	}
+
+	#ifdef inDebug
 	cout << "test a1" << endl;
+	#endif
+
 	char dest;
 	for(int dx = -1; dx <= 1 ; ++dx){ // covers Rook, Queen, Bishop, Enemy King capture vulnerability.
 		for (int dy = -1; dy <= 1; ++dy){
@@ -289,7 +291,9 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 		}
 	}
 
+	#ifdef inDebug
 	cout << "test a2" << endl;
+	#endif
 
 	int pawnXDiff[2][2] = {{1, -1}, {0, 0}};
 	int index = checkingCapture ? 0 : 1;
@@ -303,7 +307,9 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 		}		
 	}
 
+	#ifdef inDebug
 	cout << "test a3" << endl;
+	#endif
 
 	pair<int,int> knightVuln [8]; // Covers Knight capture vulnerability
 	knightVuln[0] = make_pair(x+2,y+1);
@@ -327,9 +333,15 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 		if ( dest == 'n'-diff){
 			return make_pair(a,b);
 		}
+
+		#ifdef inDebug
 		cout << "test a4." << i << endl;
+		#endif
 	}
+
+	#ifdef inDebug
 	cout << "test a5" << endl;
+	#endif
 
 	return make_pair(-1,-1);
 }
@@ -345,15 +357,20 @@ int Game::executeMove(Move &m){
 		return state_resign;
 	}
 	Piece * p = board[origin.first][origin.second];
+
 	if (!p)
 	{
-		cout << "p is null!" << endl;
+		#ifdef inDebug
+		cout << "invalid 0" << endl;
+		#endif
+
+		return state_invalid;
 	}
-	cout << "test" << endl;
-	cout << p->getChar() << endl;
-	cout << "test2" << endl;
+
 	if (!doesBoardPermit(origin.first,origin.second,dest.first,dest.second,p)){
+		#ifdef inDebug
 		cout << "invalid 1" << endl;
+		#endif
 		return state_invalid;
 	}
 	bool curColour = board[origin.first][origin.second]->getColour();
@@ -381,13 +398,24 @@ int Game::executeMove(Move &m){
 	}
 
 	//exposing self to check
+	#ifdef inDebug
 	cout << "test a" << endl;
+	#endif
+
 	pair<int,int> ourKingThreat = isThreatened(kingCords[curColour? 1:0], curColour, true, false);
+
+	#ifdef inDebug
 	cout << "test b" << endl;
+	#endif
+
 	if (ourKingThreat.first >= 0 || ourKingThreat.second >= 0){
 			board[origin.first][origin.second] = board[dest.first][dest.second]; 
 			board[dest.first][dest.second] = temp;
+			
+			#ifdef inDebug
 			cout << "invalid 2: kings is threatened by piece at " << ourKingThreat.first << ", " << ourKingThreat.second << endl;
+			#endif
+
 			return state_invalid;
 	}
 	delete temp;
@@ -403,10 +431,13 @@ int Game::executeMove(Move &m){
 					continue;
 				}
 				if(!board[eKingCoords.first + dx][eKingCoords.second + dy] || board[eKingCoords.first + dx][eKingCoords.second + dy]->getColour() == curColour){
-					cout << "should only print this once" << endl;
 					pair<int,int> result = isThreatened(make_pair(eKingCoords.first+dx,eKingCoords.second+dy),!curColour, true, false);
 					if(result.first < 0 || result.second < 0){
+						
+						#ifdef inDebug
 						cout << "check 1" << endl;
+						#endif
+
 						return state_check;
 					}
 				}
@@ -418,7 +449,11 @@ int Game::executeMove(Move &m){
 			n.second += enemyKingThreat.second;
 			pair<int,int> result = isThreatened(n,curColour, false, true);
 			if(result.first >= 0 || result.second >= 0){
+				
+				#ifdef inDebug
 				cout << "check 2" << endl;
+				#endif
+
 				return state_check;
 			}
 		}

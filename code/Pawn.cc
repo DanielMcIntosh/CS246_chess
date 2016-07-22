@@ -11,9 +11,13 @@ Pawn::Pawn(bool c): Piece{c}, firstMove{true} {}
 char Pawn::getChar() {return colour ? 'p' : 'P';};
 
 bool Pawn::isValidMove(pair<int, int> co) {
+    
+    #ifdef inDebug
     cout << "pawn 1" << endl;
     cout << "first move = " << firstMove << endl;
     cout << "colour = " << colour << endl;
+    #endif
+    
     int dir = 1;
     if (this->colour) { dir = -1;}
 

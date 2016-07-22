@@ -15,7 +15,6 @@ using namespace std;
 
 int main(){
 	Game * curGame = new Game(); // need edit
-	cout << *curGame;
 	int score [numPlayers] = {0};
 	string input;
 	while (cin>>input){
@@ -34,8 +33,6 @@ int main(){
 				}
 			}
 
-			cout << "started a new game" << endl;
-
 			runGame(p, curGame);
 
 			for (int i = 0; i < numPlayers; ++i)
@@ -43,10 +40,14 @@ int main(){
 				delete p[i];
 			}
 
+			delete curGame;
+			curGame = new Game();
+
 		} else {
 			cerr << "Invalid Command! Please enter setup or game." << endl;
 		}
 	}
+	delete curGame;
 	cout << "Final Score:" << endl;
 	cout << "White: " << score[0] << endl;
 	cout << "Black: " << score[1] << endl;
@@ -55,6 +56,8 @@ int main(){
 
 
 void runGame(Player *p[], Game *curGame){
+	cout << *curGame;
+
 	int start = curGame->getStartPlayer();
 	bool result = true;
 	for (int moveCount = 0; result ; ++moveCount){
