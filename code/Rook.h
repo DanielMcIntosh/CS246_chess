@@ -7,7 +7,8 @@
 
 class Rook: public Piece {
 public:
-    Rook(bool colour);
+	Rook(bool colour);
+    char getChar() override;
 	bool isValidMove(std::pair<int,int> co) override;
 	bool isValidCapture(std::pair<int,int> co) override;
     //Takes in difference in position for the move returns the required relative empty spaces

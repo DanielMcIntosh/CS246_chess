@@ -14,7 +14,7 @@
 using namespace std;
 
 int main(){
-	Game * curGame = new Game{}; // need edit
+	Game * curGame = new Game(); // need edit
 	int score [numPlayers] = {0};
 	string input;
 	while (cin>>input){
@@ -26,13 +26,16 @@ int main(){
 				string arg;
 				cin >> arg;
 				if (arg == "human"){
-					p[i] = new Human(); 
+					p[i] = new Human();
 				} else {
 					int lvl = arg[9] - '0';
 					p[i] = new Ai(lvl);
 				}
 			}
-			runGame(p);
+
+			cout << "started a new game" << endl;
+
+			runGame(p, curGame);
 
 			for (int i = 0; i < numPlayers; ++i)
 			{
@@ -50,18 +53,19 @@ int main(){
 }
 
 
-void runGame(Player *p[]){
-	int start = curGame.getStartPlayer();
+void runGame(Player *p[], Game *curGame){
+	int start = curGame->getStartPlayer();
 	bool result = true;
 	for (int moveCount = 0; result ; ++moveCount){
-		Move m = p[(moveCount + start)%numPlayers]->getMove();
-		int moveResult = curGame.executeMove(m);
+		Move m = p[(moveCount + start)%numPlayers]->getMove(curGame);
+		int moveResult = curGame->executeMove(m);
 		if (!moveResult){
 			--moveCount;
 			cerr << "Invalid Move" << endl;
 			continue;
 		}
 		result = reactToState(moveResult,(moveCount + start)%numPlayers);
+		cout << curGame;
 	}
 }
 

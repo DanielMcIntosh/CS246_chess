@@ -1,6 +1,8 @@
 #include "Human.h"
+#include "Move.h"
 #include <string>
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -15,7 +17,7 @@ Move Human::getMove(Game *g) {
 	if (test == "move")
 	{
 		string s;
-		s = cin.getline();
+		getline(cin, s);
 		istringstream ss {s};
 		string origin;
 		string dest;

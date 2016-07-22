@@ -2,6 +2,7 @@
 #define _GAME_
 
 #include <utility>
+#include <iostream>
 
 class Move;
 class Piece;
@@ -18,13 +19,13 @@ private:
 public:
     Game();
 	~Game();
-	int tryMove(Move &attempt);
+	int tryMove(Move &attempt, int priorityMask);
 	void setup();
 	bool isValidBoard();
 	std::pair<int,int> isThreatened(std::pair<int,int> co, bool colour);
 	int executeMove(Move &m);
 	int getStartPlayer();
-	friend ostream& Game::operator<<(ostream& os, const Game& gm);
+	friend std::ostream& operator<<(std::ostream& os, const Game& gm);
 };
 
 #endif

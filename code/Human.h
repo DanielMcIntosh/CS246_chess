@@ -3,10 +3,12 @@
 
 #include "Player.h"
 
+class Game;
+
 class Human: public Player{
 public:
 	Human();
-	Move getMove(Game *g);
+	Move getMove(Game *g) override;
 };
 
 #endif

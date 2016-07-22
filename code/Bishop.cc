@@ -5,7 +5,7 @@ using namespace std;
 
 #define sign(x) (((x) > 0) ? 1 : (((x) < 0) ? -1 : 0))
 
-Bishop::Bishop(bool c): colour{c} {}
+Bishop::Bishop(bool c): Piece{c} {}
 
 bool Bishop::isValid(pair<int,int> co){
 	int x = co.first;
@@ -16,8 +16,8 @@ bool Bishop::isValid(pair<int,int> co){
 	return false;
 }
 
-bool Bishop::isValidMove(std::pair<int,int> co) {isValid(co);}
-bool Bishop::isValidCapture(std::pair<int,int> co) {isValid(co);}
+bool Bishop::isValidMove(std::pair<int,int> co) {return isValid(co);}
+bool Bishop::isValidCapture(std::pair<int,int> co) {return isValid(co);}
 
 vector<pair<int,int>> Bishop::getMoveReq(pair<int,int> co){
 	vector<pair<int,int>> moves;

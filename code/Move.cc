@@ -11,8 +11,8 @@ Move::Move(string s){
 	string sOrigin;
 	string sDest;
 	istringstream ss{s};
-	s >> sOrigin;
-	s >> sDest;
+	ss >> sOrigin;
+	ss >> sDest;
 	origin = Piece::convertCoords(sOrigin);
 	destination = Piece::convertCoords(sDest);
 	ss >> pawnRep;

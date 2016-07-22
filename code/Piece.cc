@@ -1,5 +1,16 @@
 #include "Piece.h"
 
+#include "King.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
+
+using namespace std;
+
+Piece::Piece(bool c): colour{c} {}
+
 bool Piece::getColour() {return colour;};
 
 pair<int, int> Piece::convertCoords(string &s)
@@ -7,8 +18,24 @@ pair<int, int> Piece::convertCoords(string &s)
 	return make_pair(s[0]-'a', s[1]-'1');
 }
 
-Piece *constructPiece(char c)
+Piece *Piece::constructPiece(char c)
 {
-	cerr << "fill in Piece::constructPiece" << endl;;
-	return nullptr;
+	c |=  ('a' - 'A');
+	bool colour = c & ('a' - 'A');
+    if(c == 'r') {
+        return new Rook(colour);
+    } else if(c == 'n') {
+        return new Knight(colour);
+    } else if(c == 'b') {
+        return new Bishop(colour);
+    } else if(c == 'q') {
+        return new Queen(colour);
+    } else if(c == 'k') {
+        return new King(colour);
+    } else if(c == 'p') {
+        return new Pawn(colour);
+    }
+    return nullptr;
 }
+
+Piece::~Piece() {}

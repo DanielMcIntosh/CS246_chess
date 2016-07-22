@@ -2,9 +2,12 @@
 #define _PLAYER_
 
 class Move;
+class Game;
+
 class Player {
 public:
-	virtual Move getMove() =0; 
+	virtual Move getMove(Game *g) =0; 
+	virtual ~Player();
 };
 
 #endif

@@ -5,7 +5,7 @@ using namespace std;
 
 #define sign(x) (((x) > 0) ? 1 : (((x) < 0) ? -1 : 0))
 
-Queen::Queen(bool c): colour{c} {}
+Queen::Queen(bool c): Piece{c} {}
 
 bool Queen::isValid(pair<int,int> co){
 	int x = co.first;
@@ -19,8 +19,8 @@ bool Queen::isValid(pair<int,int> co){
 	}
 }
 
-bool Queen::isValidMove(std::pair<int,int> co) {isValid(co);}
-bool Queen::isValidCapture(std::pair<int,int> co) {isValid(co);}
+bool Queen::isValidMove(std::pair<int,int> co) {return isValid(co);}
+bool Queen::isValidCapture(std::pair<int,int> co) {return isValid(co);}
 
 vector<pair<int,int>> Queen::getMoveReq(pair<int,int> co){
 	vector<pair<int,int>> moves;
@@ -34,5 +34,5 @@ vector<pair<int,int>> Queen::getMoveReq(pair<int,int> co){
 }
 
 char Queen::getChar(){
-	return colour? 'q' : 'Q';
+	return colour ? 'q' : 'Q';
 }

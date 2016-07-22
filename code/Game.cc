@@ -1,9 +1,10 @@
 #include <vector>
-#include <utilities>
+#include <utility>
 
 #include "Game.h"
 #include "Move.h"
 #include "Piece.h"
+
 using namespace std;
 
 const char defaultBoard[8][8] = {{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, 
@@ -16,34 +17,11 @@ const char defaultBoard[8][8] = {{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
                                 {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}};
 
 Game::Game() {
-    Piece board** = new Piece*[8][8];
-    Piece *boardPtr;
-    boardPtr = board;
-    bool upperCase;
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
-            upperCase = defaultBoard[i][j] & ('a' - 'A');
-            char pieceChar = defaultBoard[i][j] | ('a' - 'A');
-            if(pieceChar) {
-                board[i][j] = nullptr;
-            } else {
-                if(pieceChar == 'r') {
-                    board[i][j] = new Rook(upperCase);
-                } else if(pieceChar == 'n') {
-                    board[i][j] = new Knight(upperCase);
-                } else if(pieceChar == 'b') {
-                    board[i][j] = new Bishop(upperCase);
-                } else if(pieceChar == 'q') {
-                    board[i][j] = new Queen(upperCase);
-                } else if(pieceChar == 'k') {
-                    board[i][j] = new King(upperCase);
-                } else {
-                    board[i][j] = new Pawn(upperCase);
-                }
-            }
+            board[i][j] = Piece::constructPiece(defaultBoard[i][j]);
         }
     }
-    this->board = boardPtr;
 }
 
 #define state_resign 2
@@ -55,21 +33,25 @@ Game::Game() {
 
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
+	cout << "1" << endl;
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
 		return false;
 	pair<int, int> diff = make_pair(x2-x1, y2-y1);
-	if ((!board[x2][y2] && !p->isValidMove(diff)) || (board[x2][y2] && !p->isValidCapture(diff)))
+	cout << "1.5" << endl;
+	if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
 		return false;
+	cout << "2" << endl;
 
 	vector< pair<int, int> > moveReq = p->getMoveReq(diff);
-	for (pair<int, int> *i = moveReq.begin(); i != moveReq.end(); ++i)
+	for (auto n: moveReq)
 	{
-		if (board[x1+i->first][y1+i->second])
+		if (board[x1+n.first][y1+n.second])
 			return false;
 	}
 
+	cout << "3" << endl;
 	//check if the king is moving into check
-	if (p->getChar() | ('a' - 'A') == 'k')
+	if ((p->getChar() | ('a' - 'A')) == 'k')
 	{
 		for (int x = 0; x < 8; ++x)
 		{
@@ -77,23 +59,26 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			{
 				Piece *enemy = board[x][y];
 				if (enemy && !enemy->isValidCapture(make_pair(x2-x, y2-y)))
-					return continue;
-				vector< pair<int, int> > enemyMoveReq = enemy->getMoveReq();
-				for (pair<int, int> *i = enemyMoveReq.begin(); i != enemyMoveReq.end(); ++i)
+					return false;
+				vector< pair<int, int> > enemyMoveReq = enemy->getMoveReq(make_pair(x2-x, y2-y));
+				for (auto n: enemyMoveReq)
 				{
-					if (board[x+i->first][x+i->second])
+					if (board[x+n.first][x+n.second])
 						break;
 				}
 			}
 		}
 	}
+	cout << "4" << endl;
 	return true;
 }
 
 int Game::tryMove(Move &attempt, int priorityMask)
 {
-	int x1 = attempt.getOrigin().first, y1 = attempt.getOrigin().second;
-	int x2 = attempt.getDestination().first, y2 = attempt.getDestination().second;
+	int x1 = attempt.getOrigin().first;
+	int y1 = attempt.getOrigin().second;
+	int x2 = attempt.getDest().first;
+	int y2 = attempt.getDest().second;
 	if (x2 > 7 || x2 < 0 || y2 > 7 || y2 < 0)
 		return 0;
 	Piece *p = board[x1][y1];
@@ -123,7 +108,7 @@ int Game::tryMove(Move &attempt, int priorityMask)
 		}
 	}
 
-	if (board[x2][y2] && board[x2][y2]->getColour() != p.getColour())
+	if (board[x2][y2] && board[x2][y2]->getColour() != p->getColour())
 	{
 		movePriority |= 0b0100;
 	}
@@ -176,11 +161,11 @@ bool Game::isValidBoard(){
 		}
 	}
 	// Check for check mate situations (Vulnerability to Queen, Bishop and Rook).
-	pair<int,int> wkThreat == isThreatened(wk_pos,false);
+	pair<int,int> wkThreat = isThreatened(wk_pos,false);
 	if (wkThreat.first >= 0 && wkThreat.second >= 0){
 		return false;
 	}
-	pair<int,int> bkThreat == isThreatened(bk_pos,true);
+	pair<int,int> bkThreat = isThreatened(bk_pos,true);
 	if (bkThreat.first >= 0 && bkThreat.second >= 0){
 		return false;
 	}
@@ -188,7 +173,7 @@ bool Game::isValidBoard(){
 }
 
 
-ostream& Game::operator<<(ostream& os, const Game& gm) {
+ostream& operator<<(ostream& os, const Game& gm) {
     for(int i = 0; i < 8; i++) {
 		os << (8 - i) << ' ';
 		for(int j = 0; j < 8; j++) {
@@ -254,19 +239,6 @@ int Game::getStartPlayer()
 	return startPlayer;
 }
 
-Game::~Game() {
-    char piece;
-    for(int i = 0; i < 8; i++) {
-        for(int j = 0; j < 8; j++) {
-            if(this->board[i][j] != nullptr) {
-                ~this->board[i][j]();
-            }
-        }
-    }
-    delete [] this->board;
-    this->board = nullptr;
-}
-
 //checks if a (theoretical) piece at co from the player designated by colour would be under threat
 pair<int,int> Game::isThreatened(pair<int,int> co, bool colour){
 	int i = co.first;
@@ -286,7 +258,7 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour){
 			if (dx == 0 && dy == 0){
 				continue;
 			}
-			for(int a = i+dx, b = j+dy; a >= 0 && a < 8 && b >= 0 && b < 8; a+dx, b+dy){
+			for(int a = i+dx, b = j+dy; a >= 0 && a < 8 && b >= 0 && b < 8; a+=dx, b+=dy){
 				if (a == i+dx && b == j+dy && board[a][b]){ // Check first place if its a king.
 					dest = board[a][b]->getChar();
 					if (dest == 'k'-diff){
@@ -351,11 +323,11 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour){
 
 
 int Game::executeMove(Move &m){
-	if(m.origin.first == m.destination.first && m.origin.second == m.destination.second){
-		return state_resign;
-	}
 	pair<int,int> origin = m.getOrigin();
 	pair<int,int> dest = m.getDest();
+	if(origin.first == dest.first && origin.second == dest.second){
+		return state_resign;
+	}
 	Piece * p = board[origin.first][origin.second];
 	if (!doesBoardPermit(origin.first,origin.second,dest.first,dest.second,p)){
 		return state_invalid;
@@ -366,6 +338,7 @@ int Game::executeMove(Move &m){
 	board[dest.first][dest.second] = p;
 	board[origin.first][origin.second] = nullptr;
 	
+
 	// search for kings positions
 	for(int x = 0, kingsFound = 0; kingsFound < 2 && x < 8; ++x){
 		for(int y = 0; y < 8 && kingsFound < 2; ++y){
@@ -378,7 +351,7 @@ int Game::executeMove(Move &m){
 				} else if (c == 'k'){
 					kingCords[1].first = x;
 					kingCords[1].second = y;
-					++kingFound;
+					++kingsFound;
 				}
 			}
 		}
@@ -394,8 +367,8 @@ int Game::executeMove(Move &m){
 	delete temp;
 
 	// check and check mate verification
-	eKingCoords = kingCords[curColour? 0:1];
-	pair<int,int> enemyKingThreat =isThreatened(eKingCords, !curColour);
+	pair<int, int> eKingCoords = kingCords[curColour? 0:1];
+	pair<int,int> enemyKingThreat =isThreatened(eKingCoords, !curColour);
 	if(enemyKingThreat.first >= 0 || enemyKingThreat.second >= 0){
 		Piece * threatPiece = board[enemyKingThreat.first][enemyKingThreat.second];
 		for(int dx =-1; dx <= 1; ++dx){
@@ -403,15 +376,15 @@ int Game::executeMove(Move &m){
 				if(dx == 0 && dy ==0){
 					continue;
 				}
-				if(!board[eKingCords.first+dx][eKingCords+dy]){
-					pair<int,int> result = isThreatened(make_pair(eKingCords.first+dx,eKingCords+dy),!curColour);
+				if(!board[eKingCoords.first + dx][eKingCoords.second + dy]){
+					pair<int,int> result = isThreatened(make_pair(eKingCoords.first+dx,eKingCoords.second+dy),!curColour);
 					if(result.first < 0 || result.second < 0){
 						return state_check;
 					}
 				}
 			}
 		}
-		vector< pair<int,int>> moveReq = threatPiece.getMoveReq(make_pair(eKingCords.first-enemyKingThreat.first,eKingCords.second-enemyKingThreat.second));
+		vector< pair<int,int>> moveReq = threatPiece->getMoveReq(make_pair(eKingCoords.first-enemyKingThreat.first,eKingCoords.second-enemyKingThreat.second));
 		for(auto n: moveReq){
 			n.first += enemyKingThreat.first;
 			n.second += enemyKingThreat.second;
@@ -436,7 +409,7 @@ int Game::executeMove(Move &m){
 					if (x == x2 && y == y2){
 						continue;
 					}
-					if(!board[x1][x2]){
+					if(!board[x][x2]){
 						continue;
 					}
 					if (doesBoardPermit(x,y,x2,y2,curPiece)){
@@ -451,14 +424,11 @@ int Game::executeMove(Move &m){
 }
     
 Game::~Game() {
-    char piece;
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             if(this->board[i][j] != nullptr) {
-                ~this->board[i][j]();
+                delete board[i][j];
             }
         }
     }
-    delete [] this->board;
-    this->board = nullptr;
 }

@@ -6,6 +6,8 @@
 
 #include "Player.h"
 
+class Game;
+
 class Ai: public Player{
 private:
 	std::vector< std::pair<int, int> > myPieces;
