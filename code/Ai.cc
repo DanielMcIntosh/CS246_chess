@@ -54,7 +54,7 @@ Move Ai::getMove(Game *g)
 	if (maxPriority <= 0)
 	{
 		cerr << "error, called getMove() after stalemate!";
-		return Move(make_pair(0, 0), make_pair(0, 0), 0);
+		return Move(make_pair(0, 0), make_pair(0, 0), 0, colour);
 	}
 
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();

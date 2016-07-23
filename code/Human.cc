@@ -31,7 +31,7 @@ Move Human::getMove(Game *g) {
 	}
 	else
 	{
-		return Move(make_pair(0, 0), make_pair(0, 0), 0, bool colour);
+		return Move(make_pair(0, 0), make_pair(0, 0), 0, colour);
 	}
 }
 
