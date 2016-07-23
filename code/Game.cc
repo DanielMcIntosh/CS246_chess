@@ -189,6 +189,7 @@ bool Game::isValidBoard(){
 	pair<int,int> wk_pos(0,0);
 	for(int i = 0; i < 8; ++i){  // Checking there only exist 1 king of each colour
 		for (int j = 0; i < 8; ++j){
+			cout<< "Reached 1" << endl;
 			char c = board[i][j]->getChar();
 			if (c == 'K'){
 				++wking;
@@ -211,6 +212,7 @@ bool Game::isValidBoard(){
 			return false;
 		}
 	}
+	cout<< "Reached 2" << endl;
 	// Check for check mate situations (Vulnerability to Queen, Bishop and Rook).
 	pair<int,int> wkThreat = isThreatened(wk_pos,false, true, false);
 	if (wkThreat.first >= 0 && wkThreat.second >= 0){
@@ -220,6 +222,7 @@ bool Game::isValidBoard(){
 	if (bkThreat.first >= 0 && bkThreat.second >= 0){
 		return false;
 	}
+	cout<< "Reached 3" << endl;
 	return true;
 }
 
@@ -311,8 +314,9 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			continue;
 		}
 		else if (temp == "done"){
-			cout<< "Reached" << endl;
-			if(this->isValidBoard()){
+			result = this->isValidBoard();
+			//cout<< "Reached 2" << endl;
+			if(result){
 				cout << "Setup is valid and completed!" << endl;
 				break;
 			} else {
