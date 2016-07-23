@@ -101,6 +101,5 @@ bool reactToState(int state, int curPlayer){
 	else if (state == -2){ //check
 		cout << (curPlayer ? "White" : "Black") << " is in check." << endl;
 	}
-
 	return (state < 0);
 }
