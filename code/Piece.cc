@@ -9,9 +9,17 @@
 
 using namespace std;
 
-Piece::Piece(bool c): colour{c} {}
+Piece::Piece(bool c): colour{c}, firstMoved{true} {}
 
 bool Piece::getColour() {return colour;};
+
+bool Piece::firstMoved() {
+    if(firstMoved) {
+        firstMoved = false;
+        return true;
+    }
+    return false;
+}
 
 pair<int, int> Piece::convertCoords(string &s)
 {

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Pawn::Pawn(bool c): Piece{c}, firstMove{true} {}
+Pawn::Pawn(bool c): Piece{c} {}
 
 char Pawn::getChar() {return colour ? 'p' : 'P';};
 
@@ -46,8 +46,4 @@ vector<pair<int,int>> Pawn::getMoveReq(pair<int,int> co) {
         req.emplace_back(temp);
     }
     return req;
-}
-
-void Pawn::firstMoved() {
-    this->firstMove = false;
 }

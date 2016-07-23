@@ -7,9 +7,11 @@
 class Piece {
 protected:
 	bool colour;
+    bool firstMoved;
 public:
 	Piece(bool colour);
 	bool getColour();
+    bool firstMoved();
 	virtual char getChar()=0;
 	virtual bool isValidMove(std::pair<int,int> co)=0;
 	virtual bool isValidCapture(std::pair<int,int> co)=0;
