@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Human::Human() {}
+Human::Human(bool colour): Player{colour}{}
 
 Move Human::getMove(Game *g) {
 	string test;
@@ -27,11 +27,11 @@ Move Human::getMove(Game *g) {
 		{
 			cerr << "Invalid move: origin and destination are the same!";
 		}
-		return Move(s);
+		return Move(s, colour);
 	}
 	else
 	{
-		return Move(make_pair(0, 0), make_pair(0, 0), 0);
+		return Move(make_pair(0, 0), make_pair(0, 0), 0, bool colour);
 	}
 }
 

@@ -30,8 +30,8 @@ char Move::getPawnRep(){
 	return pawnRep;
 }
 
-bool getColour(){
-	return colour;
+bool Move::getColour(){
+	return this->colour;
 }
 
 //ostream &operator<<(ostream &out, const Move &m) {

@@ -489,7 +489,7 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 
 
 
-int Game::executeMove(Move &m){}
+int Game::executeMove(Move &m){
 	pair<int,int> origin = m.getOrigin();
 	pair<int,int> dest = m.getDest();
 	if(origin.first == dest.first && origin.second == dest.second){

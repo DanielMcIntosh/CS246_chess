@@ -32,7 +32,7 @@ Move Ai::getMove(Game *g)
 				{
 					continue;
 				}
-				Move curMove(i, make_pair(x, y), colour ? 'q' : 'Q');
+				Move curMove(i, make_pair(x, y), colour ? 'q' : 'Q', colour);
 				int curPriority = g->tryMove(curMove, priorityMasks[this->lvl - 1]);
 				curPriority &= priorityMasks[this->lvl - 1];
 				if (curPriority > maxPriority)
@@ -73,7 +73,7 @@ Move Ai::getMove(Game *g)
 	return moveChoice;
 }
 
-Ai::Ai(int lvl, bool colour, vector< pair<int, int> > myPieces): lvl{lvl}, colour{colour}, myPieces{myPieces}
+Ai::Ai(int lvl, bool colour, vector< pair<int, int> > myPieces): lvl{lvl}, myPieces{myPieces}, Player{colour}
 {
 	
 }

@@ -7,7 +7,7 @@ class Game;
 
 class Human: public Player{
 public:
-	Human();
+	Human(bool colour);
 	Move getMove(Game *g) override;
 	void removePiece(std::pair<int, int> toRemove);
 };
