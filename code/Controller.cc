@@ -39,7 +39,7 @@ int main(){
 				string arg;
 				cin >> arg;
 				if (arg == "human"){
-					p[i] = new Human();
+					p[i] = new Human((bool)i);
 				} else {
 					int lvl = arg[9] - '0';
 					p[i] = new Ai(lvl, (bool)i, playerPieces[i]);
