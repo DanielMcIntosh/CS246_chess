@@ -51,13 +51,24 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	cout << "destination = " << x2 << ", " << y2 << endl;
 	#endif
 
-	if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
-		return false;
-
 	if (board[x2][y2] && board[x2][y2]->getColour() == p->getColour())
 	{
 		return false;
 	}
+
+	if ((p->getChar | ('a'-'A')) == 'k')
+	{
+		if (!isValidCastle(int x1, int y1, int x2, int y2, Piece *p))
+		{
+			return false
+		}
+	}
+	else
+	{
+		if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
+			return false;
+	}
+
 
 	#ifdef inDebug
 	cout << "test doesBoardPermit 1" << endl;
@@ -70,7 +81,7 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 		#ifdef inDebug
 		cout << "<" << n.first << ", " << n.second << ">, ";
 		#endif
-		if (board[x1+n.first][y1+n.second])
+		if (board[x1+n.first][y1+n.second] && board[x1+n.first][y1+n.second] != p)
 			return false;
 	}
 
@@ -88,8 +99,10 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			for (int y = 0; y < 8; ++y)
 			{
 				Piece *enemy = board[x][y];
-				if (enemy && !enemy->isValidCapture(make_pair(x2-x, y2-y)))
-					return false;
+				if (!enemy || enemy->getColour == p->getColour())
+					continue;
+				if (!enemy->isValidCapture(make_pair(x2-x, y2-y)))
+					continue;
 				vector< pair<int, int> > enemyMoveReq = enemy->getMoveReq(make_pair(x2-x, y2-y));
 				for (auto n: enemyMoveReq)
 				{
@@ -314,7 +327,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			continue;
 		}
 		else if (temp == "done"){
-			result = this->isValidBoard();
+			bool result = this->isValidBoard();
 			//cout<< "Reached 2" << endl;
 			if(result){
 				cout << "Setup is valid and completed!" << endl;
