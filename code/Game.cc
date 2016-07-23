@@ -243,7 +243,7 @@ ostream& operator<<(ostream& os, const Game& gm) {
 void Game::setup(vector< pair<int, int> > playerPieces[])
 {
 	char c;
-	do {
+	while (true){
 		string temp;
 		cin >> temp;
 		c = temp[0];
@@ -303,7 +303,17 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			playerPieces[(pieceChar & ('a' - 'A')) ? 1 : 0].push_back(coords);
 			continue;
 		}
-	} while (c != 'd');
+		else if (c =='d'){
+			pair<int,int> result = this->isValidBoard();
+			if(result.first <0 && result.second <0){
+				cout << "Setup is valid and completed!" << endl;
+				break;
+			} else {
+				cout << "Setup is invalid, please check again" << endl;
+				continue;
+			}
+		}
+	}
 }
 
 int Game::getStartPlayer()
