@@ -38,9 +38,24 @@ bool Game::isValidCastle(int x1, int y1, int x2, int y2, Piece* p)
 {
 	if (abs(x2-x1) != 2 || y1 != y2)
 		return false;
+
+	#ifdef inDebug
+	cout << "castle relative move coordinates passed" << endl;
+	#endif
+
 	int rookX = x2 > x1 ? 7 : 0;
-	if (board[rookX][y1]->getChar() != p->getColour() ? 'r' : 'R')
+
+	#ifdef inDebug
+	cout << "expecting rook at " << rookX << ", " << y1 << endl;
+	#endif
+
+	if (board[rookX][y1]->getChar() != (p->getColour() ? 'r' : 'R'))
 		return false;
+	
+	#ifdef inDebug
+	cout << "rook presence confirmed" << endl;
+	#endif
+
 	return (board[rookX][y1]->isFirstMove() && p->isFirstMove());
 }
 
@@ -55,7 +70,7 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	pair<int, int> diff = make_pair(x2-x1, y2-y1);
 
 	#ifdef inDebug
-	cout << "test doesBoardPermit 0.5" << endl;
+	cout << "test doesBoardPermit 0.3" << endl;
 	cout << "piece = " << p->getChar() << endl;
 	cout << "origin = " << x1 << ", " << y1 << endl;
 	cout << "destination = " << x2 << ", " << y2 << endl;
@@ -65,6 +80,10 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	{
 		return false;
 	}
+
+	#ifdef inDebug
+	cout << "test doesBoardPermit 0.6" << endl;
+	#endif
 
 	if ((p->getChar() | ('a'-'A')) == 'k')
 	{
