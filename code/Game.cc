@@ -66,11 +66,11 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 		return false;
 	}
 
-	if ((p->getChar | ('a'-'A')) == 'k')
+	if ((p->getChar() | ('a'-'A')) == 'k')
 	{
-		if (!isValidCastle(int x1, int y1, int x2, int y2, Piece *p))
+		if (!isValidCastle(x1, y1, x2, y2, p))
 		{
-			return false
+			return false;
 		}
 	}
 	else
@@ -109,7 +109,7 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 			for (int y = 0; y < 8; ++y)
 			{
 				Piece *enemy = board[x][y];
-				if (!enemy || enemy->getColour == p->getColour())
+				if (!enemy || enemy->getColour() == p->getColour())
 					continue;
 				if (!enemy->isValidCapture(make_pair(x2-x, y2-y)))
 					continue;
@@ -267,7 +267,7 @@ ostream& operator<<(ostream& os, const Game& gm) {
 		os << endl;
 	}
 	os << endl;
-	os << "  adbcdefh" << endl;
+	os << "  abcdefgh" << endl;
     return os;
 }
 
@@ -552,10 +552,10 @@ int Game::executeMove(Move &m){
 	}
 
 	//move is known to be valid, proceed with making changes to board permanent
-	board[dest.first][dest.second]->firstMoved();
+	board[dest.first][dest.second]->setFirstMove();
 	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
 	{
-		board[origin.first + (dest.first-origin.first)/2][origin.second]->firstMoved();
+		board[origin.first + (dest.first-origin.first)/2][origin.second]->setFirstMove();
 	}
 	delete temp;
 
