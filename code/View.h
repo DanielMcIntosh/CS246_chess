@@ -1,9 +1,12 @@
 #include <iostream>
 
 class View {
-    istream &in;
-    istream &out;
+    std::istream &in;
+    std::istream &out;
 public:
-    View(istream &in, ostream &out);
-    
+    View(std::istream &in, std::ostream &out);
+    friend std::istream& operator>>(std::istream &is);
+    void reactToTurn(int result, int player);
+    void printScore(int wScore, int bScore);
+    void boardCheck(bool valid);
 }
