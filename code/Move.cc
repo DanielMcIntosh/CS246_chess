@@ -5,9 +5,9 @@
 using namespace std;
 
 
-Move::Move(pair<int,int> o, pair<int,int> d, char pr): origin{o}, destination {d}, pawnRep {pr}{}
+Move::Move(pair<int,int> o, pair<int,int> d, char pr, bool c): origin{o}, destination {d}, pawnRep {pr}, colour{c}{}
 
-Move::Move(string s){
+Move::Move(string s, bool colour): colour{colour}{
 	string sOrigin;
 	string sDest;
 	istringstream ss{s};
@@ -28,6 +28,10 @@ pair<int,int> Move::getDest(){
 
 char Move::getPawnRep(){
 	return pawnRep;
+}
+
+bool getColour(){
+	return colour;
 }
 
 //ostream &operator<<(ostream &out, const Move &m) {
