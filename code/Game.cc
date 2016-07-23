@@ -161,6 +161,8 @@ int Game::tryMove(Move &attempt, int priorityMask)
 	int y2 = attempt.getDest().second;
 	if (!Game::isInBounds(x2, y2))
 		return 0;
+	if (board[x1][y1]->getColour() != attempt.getColour())
+		return 0;
 	Piece *p = board[x1][y1];
 	if (!doesBoardPermit(x1, y1, x2, y2, p))
 		return 0;
@@ -487,7 +489,7 @@ pair<int,int> Game::isThreatened(pair<int,int> co, bool colour, bool checkingCap
 
 
 
-int Game::executeMove(Move &m){
+int Game::executeMove(Move &m){}
 	pair<int,int> origin = m.getOrigin();
 	pair<int,int> dest = m.getDest();
 	if(origin.first == dest.first && origin.second == dest.second){
@@ -498,9 +500,17 @@ int Game::executeMove(Move &m){
 	if (!p)
 	{
 		#ifdef inDebug
-		cout << "invalid 0" << endl;
+		cout << "invalid 0: no piece found" << endl;
 		#endif
 
+		return state_invalid;
+	}
+
+	if (p->getColour() != m.getColour())
+	{
+		#ifdef inDebug
+		cout << "invalid 0.5: wrong colour" << endl;
+		#endif
 		return state_invalid;
 	}
 
@@ -593,7 +603,7 @@ int Game::executeMove(Move &m){
 					if(result.first < 0 || result.second < 0){
 						
 						#ifdef inDebug
-						cout << "check 1" << endl;
+						cout << "check 1: king not threatened on all sides" << endl;
 						#endif
 
 						return state_check;
@@ -609,11 +619,21 @@ int Game::executeMove(Move &m){
 			if(result.first >= 0 || result.second >= 0){
 				
 				#ifdef inDebug
-				cout << "check 2" << endl;
+				cout << "check 2: player can block threat" << endl;
 				#endif
 
 				return state_check;
 			}
+		}
+
+		pair<int,int> threat = isThreatened(enemyKingThreat,curColour, false, true);
+		if(threat.first >= 0 || threat.second >= 0){
+			
+			#ifdef inDebug
+			cout << "check 3: player can capture threat" << endl;
+			#endif
+
+			return state_check;
 		}
 		return state_mate;
 	}
