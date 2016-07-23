@@ -34,6 +34,16 @@ Game::Game() {
 #define state_normal -1
 #define state_check -2
 
+bool Game::isValidCastle(int x1, int y1, int x2, int y2, Piece* p)
+{
+	if (abs(x2-x1) != 2 || y1 != y2)
+		return false;
+	int rookX = x2 > x1 ? 7 : 0;
+	if (board[rookX][y1]->getChar() != p->getColour() ? 'r' : 'R')
+		return false;
+	return (board[rookX][y1]->isFirstMove() && p->isFirstMove());
+}
+
 bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 {
 	#ifdef inDebug
@@ -482,11 +492,19 @@ int Game::executeMove(Move &m){
 		return state_invalid;
 	}
 	bool curColour = board[origin.first][origin.second]->getColour();
-	pair <int,int> kingCords [2];
-	Piece * temp = board[dest.first][dest.second];
+	
+	Piece *temp = board[dest.first][dest.second];
 	board[dest.first][dest.second] = p;
 	board[origin.first][origin.second] = nullptr;
 
+	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+	{
+		int rookX = dest.first - origin.first > 0 ? 7 : 0;
+		board[origin.first + (dest.first-origin.first)/2][origin.second] = board[rookX][origin.second];
+		board[rookX][origin.second] = nullptr;
+	}
+
+	pair <int,int> kingCords [2];
 	// search for kings positions
 	for(int x = 0, kingsFound = 0; kingsFound < 2 && x < 8; ++x){
 		for(int y = 0; y < 8 && kingsFound < 2; ++y){
@@ -517,6 +535,12 @@ int Game::executeMove(Move &m){
 	#endif
 
 	if (ourKingThreat.first >= 0 || ourKingThreat.second >= 0){
+			if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+			{
+				int rookX = dest.first - origin.first > 0 ? 7 : 0;
+				board[rookX][origin.second] = board[origin.first + (dest.first-origin.first)/2][origin.second];
+				board[origin.first + (dest.first-origin.first)/2][origin.second] = nullptr;
+			}
 			board[origin.first][origin.second] = board[dest.first][dest.second]; 
 			board[dest.first][dest.second] = temp;
 			
@@ -528,6 +552,11 @@ int Game::executeMove(Move &m){
 	}
 
 	//move is known to be valid, proceed with making changes to board permanent
+	board[dest.first][dest.second]->firstMoved();
+	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+	{
+		board[origin.first + (dest.first-origin.first)/2][origin.second]->firstMoved();
+	}
 	delete temp;
 
 	// check and check mate verification
