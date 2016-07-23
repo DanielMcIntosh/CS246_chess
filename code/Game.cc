@@ -253,9 +253,9 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 		cin >> temp;
 		c = temp[0];
 		string s;
-		cin >> s;
 		if (c == '=')
 		{
+			cin >> s;
 			//convert to lower case
 			for (int i = 0; i < s.length(); ++i)
 			{
@@ -266,6 +266,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 		}
 		else if (c == '-')
 		{
+			cin >> s;
 			pair<int, int> coords = Piece::convertCoords(s);
 			bool pieceColour = board[coords.first][coords.second]->getChar() & ('a' - 'A');
 			delete board[coords.first][coords.second];
@@ -282,7 +283,8 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			continue;
 		}
 		else if (c == '+')
-		{
+		{	
+			cin >> s;
 			char pieceChar = s[0];
 			Piece *p = Piece::constructPiece(pieceChar);
 			string s2;
@@ -308,9 +310,9 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			playerPieces[(pieceChar & ('a' - 'A')) ? 1 : 0].push_back(coords);
 			continue;
 		}
-		else if (c =='d'){
-			pair<int,int> result = this->isValidBoard();
-			if(result.first <0 && result.second <0){
+		else if (temp == "done"){
+			cout<< "Reached" << endl;
+			if(this->isValidBoard()){
 				cout << "Setup is valid and completed!" << endl;
 				break;
 			} else {
