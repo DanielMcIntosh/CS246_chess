@@ -54,6 +54,11 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
 		return false;
 
+	if (board[x2][y2] && board[x2][y2]->getColour() == p->getColour())
+	{
+		return false;
+	}
+
 	#ifdef inDebug
 	cout << "test doesBoardPermit 1" << endl;
 	cout << "moveReq = {";
