@@ -233,7 +233,11 @@ bool Game::isValidBoard(){
 	pair<int,int> wk_pos(0,0);
 	for(int i = 0; i < 8; ++i){  // Checking there only exist 1 king of each colour
 		for (int j = 0; i < 8; ++j){
-			cout<< "Reached 1" << endl;
+			if (!board[i][j]){
+				cout << "TEST" << endl;
+				continue;
+			}
+			cout<< board[i][j]->getChar() << endl;
 			char c = board[i][j]->getChar();
 			if (c == 'K'){
 				++wking;
@@ -297,8 +301,10 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 	char c;
 	for(int i = 0; i < 8; ++i){
 		for(int j = 0; j < 8; ++j){
-		if(board[i][j]){
-			delete board[i][j];
+			if(board[i][j]){
+				delete board[i][j];
+				board[i][j] = nullptr;
+			}
 		}
 	}
 	while (true){
