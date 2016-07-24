@@ -31,49 +31,34 @@ int main(){
 
 
 	string input;
-	while (true){
-		cin.exceptions(ios::eofbit|ios::failbit);
-		try{
-			if (input == "setup"){
-				curGame->setup(playerPieces);
-				catch()
-			} else if (input == "game"){
-				Player *p[numPlayers];
-				for (int i = 0 ; i < numPlayers; ++i){
-					string arg;
-					cin >> arg;
-					if (arg == "human"){
-						p[i] = new Human((bool)i);
-					} else {
-						int lvl = arg[9] - '0';
-						p[i] = new Ai(lvl, (bool)i, playerPieces[i]);
-					}
-				}
-
-				runGame(p, curGame);
-
-				for (int i = 0; i < numPlayers; ++i)
-				{
-					delete p[i];
-				}
-
-				delete curGame;
-				curGame = new Game();
-
-			} else {
-				cerr << "Invalid Command! Please enter setup or game." << endl;
-			}
-		}
-		catch (ios::failure){
-			if (cin.eof()){
-				cin.clear();
-				if (!fileRead){
-					fileRead = true;
-					continue;
+	while (cin >> input){
+		if (input == "setup"){
+			curGame->setup(playerPieces);
+		} else if (input == "game"){
+			Player *p[numPlayers];
+			for (int i = 0 ; i < numPlayers; ++i){
+				string arg;
+				cin >> arg;
+				if (arg == "human"){
+					p[i] = new Human((bool)i);
 				} else {
-					break;
+					int lvl = arg[9] - '0';
+					p[i] = new Ai(lvl, (bool)i, playerPieces[i]);
 				}
 			}
+
+			runGame(p, curGame);
+
+			for (int i = 0; i < numPlayers; ++i)
+			{
+				delete p[i];
+			}
+
+			delete curGame;
+			curGame = new Game();
+
+		} else {
+			cerr << "Invalid Command! Please enter setup or game." << endl;
 		}
 	}
 	delete curGame;
