@@ -295,6 +295,12 @@ ostream& operator<<(ostream& os, const Game& gm) {
 void Game::setup(vector< pair<int, int> > playerPieces[])
 {
 	char c;
+	for(int i = 0; i < 8; ++i){
+		for(int j = 0; j < 8; ++j){
+		if(board[i][j]){
+			delete board[i][j];
+		}
+	}
 	while (true){
 		string temp;
 		cin >> temp;
