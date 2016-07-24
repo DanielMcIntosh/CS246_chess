@@ -5,7 +5,7 @@
 #include "Move.h"
 #include "Piece.h"
 
-#define inDebug
+//#define inDebug
 
 using namespace std;
 
@@ -236,7 +236,6 @@ bool Game::isValidBoard(){
 			if (!board[i][j]){
 				continue;
 			}
-			cout<< board[i][j]->getChar() << endl;
 			char c = board[i][j]->getChar();
 			if (c == 'K'){
 				++wking;
@@ -253,13 +252,18 @@ bool Game::isValidBoard(){
 	}
 	// Check if there doesn't exist any Pawns on the first and last row.
 	for (int j = 0; j < 8; ++j){
-		char a = board[0][j]->getChar();
-		char b = board[7][j]->getChar();
+		char a = 0;
+		char b = 0;
+		if (board[j][7]){
+		 a = board[j][7]->getChar();
+		}
+		if (board[j][0]){
+		 b = board[j][0]->getChar();
+		}
 		if(a=='P'|| a== 'p' || b == 'P'||b== 'p'){
 			return false;
 		}
 	}
-	cout<< "Reached 2" << endl;
 	// Check for check mate situations (Vulnerability to Queen, Bishop and Rook).
 	pair<int,int> wkThreat = isThreatened(wk_pos,false, true, false);
 	if (wkThreat.first >= 0 && wkThreat.second >= 0){
@@ -269,7 +273,6 @@ bool Game::isValidBoard(){
 	if (bkThreat.first >= 0 && bkThreat.second >= 0){
 		return false;
 	}
-	cout<< "Reached 3" << endl;
 	return true;
 }
 
