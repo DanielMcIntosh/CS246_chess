@@ -242,12 +242,13 @@ bool Game::isValidBoard(){
 				wk_pos.first = i;
 				wk_pos.second = j;
 			} else if (c == 'k'){
+				++bking;
 				bk_pos.first =i;
 				bk_pos.second = j;
 			}
 		}
 	}
-	if (bking != 1 && wking != 1){
+	if (!(bking == 1 && wking == 1)){
 		return false;
 	}
 	// Check if there doesn't exist any Pawns on the first and last row.
