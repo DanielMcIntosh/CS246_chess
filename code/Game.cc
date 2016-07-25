@@ -595,7 +595,7 @@ int Game::executeMove(Move &m){
 	board[dest.first][dest.second] = p;
 	board[origin.first][origin.second] = nullptr;
 
-	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
 	{
 		int rookX = dest.first - origin.first > 0 ? 7 : 0;
 		board[origin.first + (dest.first-origin.first)/2][origin.second] = board[rookX][origin.second];
@@ -633,7 +633,7 @@ int Game::executeMove(Move &m){
 	#endif
 
 	if (ourKingThreat.first >= 0 || ourKingThreat.second >= 0){
-			if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+			if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
 			{
 				int rookX = dest.first - origin.first > 0 ? 7 : 0;
 				board[rookX][origin.second] = board[origin.first + (dest.first-origin.first)/2][origin.second];
@@ -651,7 +651,7 @@ int Game::executeMove(Move &m){
 
 	//move is known to be valid, proceed with making changes to board permanent
 	board[dest.first][dest.second]->setFirstMove();
-	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - dest.second) == 2)
+	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
 	{
 		board[origin.first + (dest.first-origin.first)/2][origin.second]->setFirstMove();
 	}

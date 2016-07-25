@@ -12,6 +12,7 @@ class Game {
 private:
 	Piece *board[8][8];
 	int startPlayer;
+	std::pair<int, int> ghostPawn = std::make_pair(-1, -1);
 	bool doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p);
 	bool isValidCastle(int x1, int y1, int x2, int y2, Piece *p);
 public:
