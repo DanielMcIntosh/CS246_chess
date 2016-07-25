@@ -31,6 +31,12 @@ int main(){
 	while (cin >> input){
 		if (input == "setup"){
 			curGame->setup(playerPieces);
+			for(int i = 0 ; i < 2; ++i){
+				cout << i << endl;
+				for(auto n:playerPieces[i]){
+						cout << n.first << ", " << n.second << endl;
+				}
+			}
 		} else if (input == "game"){
 			Player *p[numPlayers];
 			for (int i = 0 ; i < numPlayers; ++i){

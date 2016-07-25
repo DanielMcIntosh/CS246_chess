@@ -299,14 +299,15 @@ ostream& operator<<(ostream& os, const Game& gm) {
 void Game::setup(vector< pair<int, int> > playerPieces[])
 {
 	char c;
-	for(int i = 0; i < 8; ++i){
-		for(int j = 0; j < 8; ++j){
-			if(board[i][j]){
-				delete board[i][j];
-				board[i][j] = nullptr;
-			}
-		}
-	}
+	//for(int i = 0; i < 8; ++i){
+	//	for(int j = 0; j < 8; ++j){
+	//		if(board[i][j]){
+	//			delete board[i][j];
+	//			board[i][j] = nullptr;
+	//		}
+	//	}
+	//}
+
 	while (true){
 		string temp;
 		cin >> temp;
@@ -324,21 +325,50 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			continue;
 		}
 		else if (temp == "load"){
+			cout << "Please type file name: ";
 			cin >> s;
 			ifstream f (s);
 			cout << "File read succesful" << endl;
 			for(int j = 7; j >= 0 ; --j){
 				for(int i = 0; i < 8 ; ++i){
-					//cout << j << " ," << i << endl;
+					pair<int, int> coords (i,j);
 					char c;
 					f >> c;
 					if (c == '_'){
+						if (board[i][j]){
+							bool pieceColour = board[i][j]->getChar() & ('a' - 'A');
+							delete board[coords.first][coords.second];
+							board[coords.first][coords.second] = nullptr;
+
+							vector< pair<int, int> > pieces = playerPieces[pieceColour ? 1 : 0];
+							for (int i = 0; i < pieces.size(); ++i)
+							{
+								if (pieces[i] == coords){
+									cout << "Reached 1" << endl;
+									playerPieces[pieceColour ? 1 : 0].erase(playerPieces[pieceColour ? 1 : 0].begin()+i);
+								}
+							}
+						}
 						continue;
+					} else {
+						if (board[i][j]){
+							bool pieceColour = board[coords.first][coords.second]->getChar() & ('a' - 'A');
+							delete board[coords.first][coords.second];
+							board[coords.first][coords.second] = nullptr;
+
+							vector< pair<int, int> > pieces = playerPieces[pieceColour ? 1 : 0];
+							for (int i = 0; i < pieces.size(); ++i)
+							{
+								if (pieces[i] == coords){
+									cout << "Reached 2" << endl;
+									playerPieces[pieceColour ? 1 : 0].erase(playerPieces[pieceColour ? 1 : 0].begin()+i);
+								}
+							}
+						}
+						Piece * p = Piece::constructPiece(c);
+						board[i][j] = p;
+						playerPieces[(c & ('a' - 'A')) ? 1 : 0].push_back(coords);
 					}
-					pair<int, int> coords (i,j);
-					Piece * p = Piece::constructPiece(c);
-					board[i][j] = p;
-					playerPieces[(c & ('a' - 'A')) ? 1 : 0].push_back(coords);
 				}
 			}
 			string colour = "N";
@@ -350,7 +380,6 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 					startPlayer = 1;
 				}
 			}
-			cout << *this << endl;
 			continue;
 		}
 		else if (c == '-')
@@ -362,11 +391,9 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			board[coords.first][coords.second] = nullptr;
 
 			vector< pair<int, int> > pieces = playerPieces[pieceColour ? 1 : 0];
-			for (int i = 0; i < pieces.size(); ++i)
-			{
-				if (pieces[i] == coords)
-				{
-					pieces.erase(pieces.begin()+i);
+			for (int i = 0; i < pieces.size(); ++i){
+				if (pieces[i] == coords){
+					playerPieces[pieceColour ? 1 : 0].erase(playerPieces[pieceColour ? 1 : 0].begin()+i);
 				}
 			}
 			continue;
@@ -383,12 +410,11 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			if (board[coords.first][coords.second])
 			{
 				bool originalColour = board[coords.first][coords.second]->getChar() & ('a' - 'A');	
-				vector< pair<int, int> > pieces = playerPieces[originalColour ? 0 : 1];
+				vector< pair<int, int> > pieces = playerPieces[originalColour ? 1 : 0];
 				for (int i = 0; i < pieces.size(); ++i)
 				{
-					if (pieces[i] == coords)
-					{
-						pieces.erase(pieces.begin()+i);
+					if (pieces[i] == coords){
+						playerPieces[originalColour ? 1 : 0].erase(playerPieces[originalColour ? 1 : 0].begin()+i);
 						break;
 					}
 				}
@@ -411,6 +437,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 				continue;
 			}
 		}
+		
 	}
 }
 
