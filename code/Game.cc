@@ -5,7 +5,7 @@
 #include "Move.h"
 #include "Piece.h"
 
-//#define inDebug
+#define inDebug
 
 using namespace std;
 
@@ -18,7 +18,7 @@ const char defaultBoard[8][8] = {{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
                                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
                                 {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}};
 
-Game::Game() startPlayer{0} {
+Game::Game() {
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
         	//inverts coordinates to get [x][y]
@@ -85,16 +85,13 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	cout << "test doesBoardPermit 0.6" << endl;
 	#endif
 
-	if ((p->getChar() | ('a'-'A')) == 'k')
-	{
-		if (!isValidCastle(x1, y1, x2, y2, p))
-		{
+	if ((p->getChar() | ('a'-'A')) == 'k') {
+		if (!isValidCastle(x1, y1, x2, y2, p) && (abs(x1-x2) == 2)){
 			return false;
 		}
-	}
-	else
-	{
-		if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff))))
+	} else if ((!board[x2][y2] && !(p->isValidMove(diff))) || (board[x2][y2] && !(p->isValidCapture(diff)))){
+			
+			//cout <<"This language sucks 2" << endl;
 			return false;
 	}
 
@@ -407,7 +404,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			//cout<< "Reached 2" << endl;
 			if(result){
 				cout << "Setup is valid and completed!" << endl;
-				cout << startPlayer << endl;
+				cout << startPlayer<< endl;
 				break;
 			} else {
 				cout << "Setup is invalid, please check again" << endl;
