@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include "View.h"
 
 using namespace std;
 
@@ -48,3 +50,4 @@ void View::welcome() {
     out << "Welcome to Chess!" << endl;
     out << "Please enter a command!" << endl;
 }
+

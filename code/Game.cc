@@ -101,16 +101,15 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 	cout << "moveReq = {";
 	#endif
 
-    if((p->getChar() != 'p' && p->getChar() != 'P')) {
-	   vector< pair<int, int> > moveReq = p->getMoveReq(diff);
-	   for (auto n: moveReq)
-	   {
-		  #ifdef inDebug
-		  cout << "<" << n.first << ", " << n.second << ">, ";
-		  #endif
-		  if(board[x1+n.first][y1+n.second] && board[x1+n.first][y1+n.second] != p)
-			return false;
-	}
+    vector< pair<int, int> > moveReq = p->getMoveReq(diff);
+    for (auto n: moveReq)
+    {
+        #ifdef inDebug
+        cout << "<" << n.first << ", " << n.second << ">, ";
+        #endif
+        if(board[x1+n.first][y1+n.second] && board[x1+n.first][y1+n.second] != p)
+            return false;
+    }
 
 	#ifdef inDebug
 	cout << "}" << endl;

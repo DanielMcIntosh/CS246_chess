@@ -11,7 +11,6 @@ class Game;
 class Ai: public Player{
 private:
 	int lvl;
-	bool colour;
 	std::vector< std::pair<int, int> > myPieces;
 public:
 	Ai(int lvl, bool colour, std::vector< std::pair<int, int> > myPieces);
