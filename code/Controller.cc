@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-
 #include "Controller.h"
 #include "Player.h"
 #include "Human.h"
@@ -14,10 +13,8 @@
 using namespace std;
 
 int main(){
-	bool fileRead = false;
 	Game * curGame = new Game();
 	int score [numPlayers] = {0};
-
 	vector< pair<int, int>> playerPieces[numPlayers]{};
 	for (int i = 0; i < numPlayers; ++i)
 	{
@@ -29,8 +26,8 @@ int main(){
 		}
 	}
 
-
 	string input;
+
 	while (cin >> input){
 		if (input == "setup"){
 			curGame->setup(playerPieces);

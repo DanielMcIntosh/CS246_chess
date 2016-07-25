@@ -1,6 +1,6 @@
 #include <vector>
 #include <utility>
-
+#include <fstream>
 #include "Game.h"
 #include "Move.h"
 #include "Piece.h"
@@ -326,6 +326,36 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			startPlayer = (s == "black") ? 1 : 0;
 			continue;
 		}
+		else if (temp == "load"){
+			cin >> s;
+			ifstream f (s);
+			cout << "File read succesful" << endl;
+			for(int j = 7; j >= 0 ; --j){
+				for(int i = 0; i < 8 ; ++i){
+					//cout << j << " ," << i << endl;
+					char c;
+					f >> c;
+					if (c == '_'){
+						continue;
+					}
+					pair<int, int> coords (i,j);
+					Piece * p = Piece::constructPiece(c);
+					board[i][j] = p;
+					playerPieces[(c & ('a' - 'A')) ? 1 : 0].push_back(coords);
+				}
+			}
+			string colour = "N";
+			f >> colour;
+			if (colour != "N"){
+				if (colour == "W"){
+					startPlayer = 0;
+				} else {
+					startPlayer = 1;
+				}
+			}
+			cout << *this << endl;
+			continue;
+		}
 		else if (c == '-')
 		{
 			cin >> s;
@@ -377,6 +407,7 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 			//cout<< "Reached 2" << endl;
 			if(result){
 				cout << "Setup is valid and completed!" << endl;
+				cout << startPlayer << endl;
 				break;
 			} else {
 				cout << "Setup is invalid, please check again" << endl;
