@@ -657,6 +657,12 @@ int Game::executeMove(Move &m){
 	}
 	delete temp;
 
+	if ((dest.second == 7 || dest.second == 0) && (board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'p')
+	{
+		delete board[dest.first][dest.second];
+		board[dest.first][dest.second] = Piece::constructPiece(m.getPawnRep());
+	}
+
 	// check and check mate verification
 	pair<int, int> eKingCoords = kingCords[curColour? 0:1];
 	pair<int,int> enemyKingThreat =isThreatened(eKingCoords, !curColour, true, false);
