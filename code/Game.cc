@@ -345,7 +345,6 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 							for (int i = 0; i < pieces.size(); ++i)
 							{
 								if (pieces[i] == coords){
-									cout << "Reached 1" << endl;
 									playerPieces[pieceColour ? 1 : 0].erase(playerPieces[pieceColour ? 1 : 0].begin()+i);
 								}
 							}
@@ -361,7 +360,6 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 							for (int i = 0; i < pieces.size(); ++i)
 							{
 								if (pieces[i] == coords){
-									cout << "Reached 2" << endl;
 									playerPieces[pieceColour ? 1 : 0].erase(playerPieces[pieceColour ? 1 : 0].begin()+i);
 								}
 							}

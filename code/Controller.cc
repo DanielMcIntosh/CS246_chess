@@ -56,7 +56,17 @@ int main(){
 			{
 				delete p[i];
 			}
-
+			playerPieces[0].clear();
+			playerPieces[1].clear();
+			for (int i = 0; i < numPlayers; ++i)
+			{
+				int y = i ? 6 : 0;
+				for (int x = 0; x < 8; ++x)
+				{
+					playerPieces[i].push_back(make_pair(x, y));
+					playerPieces[i].push_back(make_pair(x, y+1));
+				}
+			}
 			delete curGame;
 			curGame = new Game();
 
