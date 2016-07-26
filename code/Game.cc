@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Move.h"
 #include "Piece.h"
+#include "View.h"
 
 //#define inDebug
 
@@ -298,7 +299,7 @@ ostream& operator<<(ostream& os, const Game& gm) {
     return os;
 }
 
-void Game::setup(vector< pair<int, int> > playerPieces[])
+void Game::setup(vector< pair<int, int> > playerPieces[], View v)
 {
 	char c;
 	//for(int i = 0; i < 8; ++i){
@@ -427,13 +428,10 @@ void Game::setup(vector< pair<int, int> > playerPieces[])
 		}
 		else if (temp == "done"){
 			bool result = this->isValidBoard();
-			//cout<< "Reached 2" << endl;
+			v.boardCheck(result);
 			if(result){
-				cout << "Setup is valid and completed!" << endl;
-				cout << startPlayer<< endl;
 				break;
 			} else {
-				cout << "Setup is invalid, please check again" << endl;
 				continue;
 			}
 		}
@@ -660,7 +658,6 @@ int Game::executeMove(Move &m){
 
 	if ((dest.second == 7 || dest.second == 0) && Game::toLower(board[dest.first][dest.second]->getChar()) == 'p')
 	{
-		cout << "awoefiaoiwefhjowaieh foawejf" << endl;
 		delete board[dest.first][dest.second];
 		board[dest.first][dest.second] = Piece::constructPiece(m.getPawnRep());
 	}

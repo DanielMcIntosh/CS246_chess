@@ -16,6 +16,8 @@ using namespace std;
 
 int main(){
 	Game * curGame = new Game();
+
+	View v = View();
 	int score [numPlayers] = {0};
 	vector< pair<int, int>> playerPieces[numPlayers]{};
 	for (int i = 0; i < numPlayers; ++i)
@@ -30,15 +32,11 @@ int main(){
 
 	string input;
 
+	v.welcome();
+
 	while (cin >> input){
 		if (input == "setup"){
-			curGame->setup(playerPieces);
-			for(int i = 0 ; i < 2; ++i){
-				cout << i << endl;
-				for(auto n:playerPieces[i]){
-					cout << n.first << ", " << n.second << endl;
-				}
-			}
+			curGame->setup(playerPieces, v);
 		} else if (input == "game"){
 			Player *p[numPlayers];
 			for (int i = 0 ; i < numPlayers; ++i){
@@ -52,7 +50,7 @@ int main(){
 				}
 			}
 
-			int winner = runGame(p, curGame);
+			int winner = runGame(p, curGame, v);
 			if (winner == -1){
 				score[0] += 0.5;
 				score[1] += 0.5;
@@ -83,14 +81,11 @@ int main(){
 		}
 	}
 	delete curGame;
-	cout << "Final Score:" << endl;
-	cout << "White: " << score[0] << endl;
-	cout << "Black: " << score[1] << endl;
-
+	v.printScore(score[0], score[1]);
 }
 
 
-int runGame(Player *p[], Game *curGame){
+int runGame(Player *p[], Game *curGame, View view){
 	cout << *curGame;
 	int start = curGame->getStartPlayer();
 	int result = 0;
@@ -105,7 +100,7 @@ int runGame(Player *p[], Game *curGame){
 
 		p[(moveCount + start + 1)%numPlayers]->removePiece(m.getDest());
 
-		result = reactToState(moveResult,(moveCount + start)%numPlayers);
+		result = reactToState(moveResult,(moveCount + start)%numPlayers, view);
 		cout << *curGame;
 	}
 	if (result < 0)
@@ -114,18 +109,10 @@ int runGame(Player *p[], Game *curGame){
 }
 
 //returns false when endgame state reached
-int reactToState(int state, int curPlayer){
-	if (state == 3){ //check mate
-		cout << "Checkmate! ";
-	}
-	if (state >= 2){ //any win (resign or checkmate)
-		cout << (((bool)curPlayer == (bool)(state%2)) ? "Black" : "White") << " wins!" << endl;
-	} else if (state == 1){ //stalemate
-		cout << "Stalemate!" << endl;
+int reactToState(int state, int curPlayer, View view){
+	view.reactToTurn(state, curPlayer);
+	if (state == 1){ //stalemate
 		return -1;
-	} else if (state == -1){} //normal
-	else if (state == -2){ //check
-		cout << (curPlayer ? "White" : "Black") << " is in check." << endl;
-	} 
+	}
 	return (state > 0) ? ((curPlayer + state) % 2 + 1) : 0;
 }
