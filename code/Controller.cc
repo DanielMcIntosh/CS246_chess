@@ -15,8 +15,6 @@
 using namespace std;
 
 int main(){
-	View v = View();
-	v.welcome();
 	Game * curGame = new Game();
 	int score [numPlayers] = {0};
 	vector< pair<int, int>> playerPieces[numPlayers]{};
@@ -36,7 +34,7 @@ int main(){
 		if (input == "setup"){
 			curGame->setup(playerPieces);
 			for(int i = 0 ; i < 2; ++i){
-				v << i << endl;
+				cout << i << endl;
 				for(auto n:playerPieces[i]){
 					cout << n.first << ", " << n.second << endl;
 				}
