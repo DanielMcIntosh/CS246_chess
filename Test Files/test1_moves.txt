@@ -1,0 +1,15 @@
+test1 moves
+e8 g8 Castling
+e1 g1* Rook missing for castle
+d6 e7 pawn capture
+b4 b5* No Piece
+f8 f7 
+e7 e6* wrong direction
+e7 e8 pawn promo + pawn move + check 
+g8 f8* invalid move direction
+f7 f8 block
+e8 f6* not escaping check
+e8 g6 queen capture
+h4 f6* wrong piece colour
+f8 f6 
+h4 f6 bishop capture + stalemate
