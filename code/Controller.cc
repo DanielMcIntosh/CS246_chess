@@ -132,3 +132,68 @@ int reactToState(int state, int curPlayer){
 	} 
 	return (state > 0) ? ((curPlayer + state) % 2 + 1) : 0;
 }
+
+
+void displaySetup(Xwindow *x, Game * g){
+	for (int i = 0; i < 9 ; ++i){
+    if (i == 8){
+      for(int j = 0; j < 8; ++j){
+        string s = to_string(8-j);
+        x->drawString(i*25+10, j*25+16, s, Xwindow::Black);
+      }
+    } else {
+      for(int j=0; j < 9 ; ++j){
+        if (j == 8){
+          char c = i + 'a';
+          stringstream ss;
+          string s;
+          ss << c;
+          ss >> s;
+          x.drawString(i*25+10, j*25+16, s, Xwindow::Black);
+        } else {
+          if (i % 2 == j%2){
+            char c = g->getPosChar(i,7-j);
+            x->fillRectangle(i*25, j*25, 25, 25, Xwindow::White);
+            if (c == '_'){
+              continue;
+            }
+            if (c < 'a'){
+	          stringstream ss;
+	          string s;
+	          ss << c;
+	          ss >> s;
+              x->drawString(i*25+10, j*25+16, s , Xwindow::Magenta);
+            } else {
+	          stringstream ss;
+	          string s;
+	          ss << c;
+	          ss >> s;
+              s[0] -= 32;
+              x->drawString(i*25+10, j*25+16, s, Xwindow::Orange);
+            }
+          } else {
+            char c = g->getPosChar(i,7-j);
+            x->fillRectangle(i*25, j*25, 25, 25, Xwindow::Black);
+            if (c == '_'){
+              continue;
+            }
+            if (c < 'a'){
+	          stringstream ss;
+	          string s;
+	          ss << c;
+	          ss >> s;
+              x->drawString(i*25+10, j*25+16, s , Xwindow::Magenta);
+            } else {
+	          stringstream ss;
+	          string s;
+	          ss << c;
+	          ss >> s;
+              s[0] -= 32;
+              x->drawString(i*25+10, j*25+16, s, Xwindow::Orange);
+            }
+          }
+        }
+      }
+    }
+  }
+}

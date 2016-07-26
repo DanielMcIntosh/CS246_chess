@@ -770,6 +770,9 @@ char Game::toLower(char c)
 
 
 char Game::getPosChar(int x, int y){
+	if (!board[x][y]){
+		return '_'
+	}
 	char c = board[x][y]->getChar();
 	return c;
 }
