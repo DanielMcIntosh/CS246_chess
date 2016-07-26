@@ -16,6 +16,7 @@ private:
 	bool doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p);
 	bool isValidCastle(int x1, int y1, int x2, int y2, Piece *p);
 public:
+	char getPosChar(int x, int y);
 	bool causeCheck(int priority);
 	bool doesCapture(int priority);
 	bool isSafe(int priority);

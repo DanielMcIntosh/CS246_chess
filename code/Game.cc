@@ -766,3 +766,10 @@ char Game::toLower(char c)
 {
 	return c | ('a' - 'A');
 }
+
+
+
+char Game::getPosChar(int x, int y){
+	char c = board[x][y]->getChar();
+	return c;
+}

@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "Move.h"
 #include "View.h"
+#include "window.h"
 
 #define numPlayers 2
 
@@ -94,7 +95,7 @@ int main(){
 
 int runGame(Player *p[], Game *curGame){
 	cout << *curGame;
-
+	Xwindow display(225,225);
 	int start = curGame->getStartPlayer();
 	int result = 0;
 	for (int moveCount = 0; !result ; ++moveCount){
