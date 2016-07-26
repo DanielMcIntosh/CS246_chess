@@ -1,0 +1,8 @@
+setup
+load
+testai.txt
+done
+game computer[3] computer[2]
+move
+move
+move

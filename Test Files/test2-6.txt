@@ -1,0 +1,35 @@
+Test 2
+In Setup
+- e1
+done
++ K e1
+
+Test 3
+In Setup
++ K a4
+done
+- a4
+
+Test 4
+In Setup
++ P c8
+done
+- f8
+
+Test 5
+In Setup
++ p f2
+done
+- f2
+
+Test 6
+In Setup
+-f8
+-h2
++ b e7
+
+in Game
+f2 f4
+e7 h4
+h1 h4
+d8 h4
