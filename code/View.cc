@@ -4,15 +4,16 @@
 
 using namespace std;
 
-View::View(istream &in=cin, ostream &out=cout): in{in}, out{out} {};
+View::View(istream &in, ostream &out): in{in}, out{out} {};
 
-View::istream& operator>>(std::istream &is) {
-    in >> is;
-    return is;
+template<typename T>
+View& View::operator>>(T &a) {
+    return View(this->in >> a, out);
 }
 
-View::ostream& operator<<(std::ostream &os) {
-    
+template<typename T> 
+View& View::operator<<(T &a) {
+    return View(in, this->out << a);
 }
 
 void View::reactToTurn(int result, int player) {
@@ -38,7 +39,7 @@ void View::printScore(int wScore, int bScore) {
 	out << "Black: " << bScore << endl;
 }
 
-void View::boardCheck(vool valid) {
+void View::boardCheck(bool valid) {
     if(valid) {
         out << "Setup is valid and completed!" << endl;
     } else {

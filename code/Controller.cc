@@ -1,18 +1,22 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+
 #include "Controller.h"
 #include "Player.h"
 #include "Human.h"
 #include "Ai.h"
 #include "Game.h"
 #include "Move.h"
+#include "View.h"
 
 #define numPlayers 2
 
 using namespace std;
 
 int main(){
+	View v = View();
+	v.welcome();
 	Game * curGame = new Game();
 	int score [numPlayers] = {0};
 	vector< pair<int, int>> playerPieces[numPlayers]{};
@@ -32,9 +36,9 @@ int main(){
 		if (input == "setup"){
 			curGame->setup(playerPieces);
 			for(int i = 0 ; i < 2; ++i){
-				cout << i << endl;
+				v << i << endl;
 				for(auto n:playerPieces[i]){
-						cout << n.first << ", " << n.second << endl;
+					cout << n.first << ", " << n.second << endl;
 				}
 			}
 		} else if (input == "game"){
