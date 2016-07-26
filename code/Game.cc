@@ -5,7 +5,7 @@
 #include "Move.h"
 #include "Piece.h"
 
-#define inDebug
+//#define inDebug
 
 using namespace std;
 
@@ -49,7 +49,7 @@ bool Game::isValidCastle(int x1, int y1, int x2, int y2, Piece* p)
 	cout << "expecting rook at " << rookX << ", " << y1 << endl;
 	#endif
 
-	if (board[rookX][y1]->getChar() != (p->getColour() ? 'r' : 'R'))
+	if (!board[rookX][y1] || board[rookX][y1]->getChar() != (p->getColour() ? 'r' : 'R'))
 		return false;
 	
 	#ifdef inDebug
@@ -118,7 +118,7 @@ bool Game::doesBoardPermit(int x1, int y1, int x2, int y2, Piece *p)
 
 
 	//check if the king is moving into check
-	if ((p->getChar() | ('a' - 'A')) == 'k')
+	if (Game::toLower(p->getChar()) == 'k')
 	{
 		for (int x = 0; x < 8; ++x)
 		{
@@ -157,6 +157,8 @@ int Game::tryMove(Move &attempt, int priorityMask)
 	int x2 = attempt.getDest().first;
 	int y2 = attempt.getDest().second;
 	if (!Game::isInBounds(x2, y2))
+		return 0;
+	if (!board[x1][y1])
 		return 0;
 	if (board[x1][y1]->getColour() != attempt.getColour())
 		return 0;
@@ -594,7 +596,7 @@ int Game::executeMove(Move &m){
 	board[dest.first][dest.second] = p;
 	board[origin.first][origin.second] = nullptr;
 
-	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
+	if (Game::toLower(board[dest.first][dest.second]->getChar()) == 'k' && abs(dest.first - origin.first) == 2)
 	{
 		int rookX = dest.first - origin.first > 0 ? 7 : 0;
 		board[origin.first + (dest.first-origin.first)/2][origin.second] = board[rookX][origin.second];
@@ -632,7 +634,7 @@ int Game::executeMove(Move &m){
 	#endif
 
 	if (ourKingThreat.first >= 0 || ourKingThreat.second >= 0){
-			if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
+			if (Game::toLower(board[dest.first][dest.second]->getChar()) == 'k' && abs(dest.first - origin.first) == 2)
 			{
 				int rookX = dest.first - origin.first > 0 ? 7 : 0;
 				board[rookX][origin.second] = board[origin.first + (dest.first-origin.first)/2][origin.second];
@@ -650,14 +652,15 @@ int Game::executeMove(Move &m){
 
 	//move is known to be valid, proceed with making changes to board permanent
 	board[dest.first][dest.second]->setFirstMove();
-	if ((board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'k' && abs(dest.first - origin.first) == 2)
+	if (Game::toLower(board[dest.first][dest.second]->getChar()) == 'k' && abs(dest.first - origin.first) == 2)
 	{
 		board[origin.first + (dest.first-origin.first)/2][origin.second]->setFirstMove();
 	}
 	delete temp;
 
-	if ((dest.second == 7 || dest.second == 0) && (board[dest.first][dest.second]->getChar() | ('a' - 'A')) == 'p')
+	if ((dest.second == 7 || dest.second == 0) && Game::toLower(board[dest.first][dest.second]->getChar()) == 'p')
 	{
+		cout << "awoefiaoiwefhjowaieh foawejf" << endl;
 		delete board[dest.first][dest.second];
 		board[dest.first][dest.second] = Piece::constructPiece(m.getPawnRep());
 	}
@@ -757,4 +760,9 @@ bool Game::isInBounds(pair<int, int> co)
 bool Game::isInBounds(int x, int y)
 {
 	return (x < 8 && x >= 0 && y < 8 && y >= 0);
+}
+
+char Game::toLower(char c)
+{
+	return c | ('a' - 'A');
 }
